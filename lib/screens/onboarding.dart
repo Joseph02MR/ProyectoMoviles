@@ -13,28 +13,28 @@ class Onboarding extends StatelessWidget {
       home: OnboardingPage(
         pages: [
           OnboardingPageModel(
-            title: 'Fast, Fluid and Secure',
+            title: 'Ejercitate, Cumple tus Metas',
             description:
-                'Enjoy the best of the world in the palm of your hands.',
+                'Registra tus medidas, Sigue tu progreso y mejora tu calidad de vida.',
             image: 'assets/image0.png',
             bgColor: Colors.indigo,
           ),
           OnboardingPageModel(
-            title: 'Connect with your friends.',
-            description: 'Connect with your friends anytime anywhere.',
+            title: 'Sumergete en un nuevo estilo de vida!.',
+            description: 'Lleva registro de tus comidas, adaptate, se mejor.',
             image: 'assets/image1.png',
             bgColor: const Color(0xff1eb090),
           ),
           OnboardingPageModel(
-            title: 'Bookmark your favourites',
+            title: 'No Olvides Guardar tu progreso',
             description:
-                'Bookmark your favourite quotes to read at a leisure time.',
+                'Registra tus avances dentro de la aplicacion, la constancia asegura el exito.',
             image: 'assets/image2.png',
             bgColor: const Color(0xfffeae4f),
           ),
           OnboardingPageModel(
-            title: 'Follow creators',
-            description: 'Follow your favourite creators to stay in the loop.',
+            title: 'Estira las piernas!',
+            description: 'La aplicacion permitira seguir tus pasos para que logres ver cuanto has caminado, no uses siempre el auto.',
             image: 'assets/image3.png',
             bgColor: Colors.purple,
           ),

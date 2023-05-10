@@ -39,6 +39,13 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   intl: ^0.17.0
   animations: ^2.0.3
+  http: ^0.13.5
+  firebase_auth: ^4.3.0
+  firebase_core: ^2.8.0
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.8
+  simple_animations: ^4.1.0
+  supercharged: ^2.1.1
 
 dev_dependencies:
   flutter_test:

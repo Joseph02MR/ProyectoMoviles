@@ -1,4 +1,5 @@
-import 'package:final_moviles/fitness_app_home_screen.dart';
+// import 'package:final_moviles/fitness_app_home_screen.dart';
+import 'package:final_moviles/screens/Login_Screen.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingPageModel {
@@ -125,7 +126,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => FitnessAppHomeScreen()));
+                              builder: (_) => LoginScreen()));
                         },
                         child: Text(
                           "Skip",
@@ -135,7 +136,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       onPressed: () {
                         if (_currentPage == widget.pages.length - 1) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => FitnessAppHomeScreen()));
+                              builder: (_) => LoginScreen()));
                         } else {
                           _pageController.animateToPage(_currentPage + 1,
                               curve: Curves.easeInOutCubic,
