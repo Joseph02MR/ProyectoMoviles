@@ -1,3 +1,6 @@
+import 'package:final_moviles/firebase/email_authentication.dart';
+import 'package:final_moviles/firebase/facebook_autjentication.dart';
+import 'package:final_moviles/firebase/google_authentication.dart';
 import 'package:final_moviles/screens/SignUP_Screen.dart';
 import 'package:final_moviles/screens/fitness_app_home_screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
@@ -21,6 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Color backgroundColor = const Color(0xFF1F1A30);
   bool ispasswordev = true;
   FormData? selected;
+
+  Emailuth emailAuth = Emailuth();
+  GoogleAuth googleAuth = GoogleAuth();
+  FaceAuth faceAuth = FaceAuth();
 
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
@@ -210,9 +217,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           delay: 1,
                           child: TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => FitnessAppHomeScreen()));
+                                setState(() {});
+                                // print(emailtxt!.text);
+                                // print(passwordtxt!.text);
+                                emailAuth
+                                    .signInWithEmailAndPassword(
+                                        email: emailController!.text,
+                                        password: passwordController!.text)
+                                    .then((value) {
+                                  if (value) {
+                                     Navigator.pop(context);
+                                     Navigator.of(context).push(MaterialPageRoute(
+                                         builder: (_) => FitnessAppHomeScreen()));
+                                  } else {
+                                    const SnackBar(
+                                      content:
+                                          Text('Verifica tus credenciales'),
+                                    );
+                                  }
+                                });
+                                // Navigator.pop(context);
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (_) => FitnessAppHomeScreen()));
                               },
                               child: Text(
                                 "Login",

@@ -350,7 +350,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     Navigator.pop(context);
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
-                                      return FitnessAppHomeScreen();
+                                      return LoginScreen();
                                     }));
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
