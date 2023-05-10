@@ -3,6 +3,7 @@ import 'package:final_moviles/firebase/facebook_autjentication.dart';
 import 'package:final_moviles/firebase/google_authentication.dart';
 import 'package:final_moviles/screens/SignUP_Screen.dart';
 import 'package:final_moviles/screens/fitness_app_home_screen.dart';
+import 'package:final_moviles/screens/forgot_password_screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
@@ -326,6 +327,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //End of Center Card
                 //Start of outer card
+                
+                 const SizedBox(
+                  height: 10,
+                ),
+                FadeAnimation(
+                  delay: 1,
+                  child: GestureDetector(
+                    onTap: (() {
+                      Navigator.pop(context);
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return ForgotPasswordScreen();
+                      }));
+                    }),
+                    child: Text("Can't Log In?",
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          letterSpacing: 0.5,
+                        )),
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
