@@ -5,6 +5,7 @@ import 'package:final_moviles/screens/SignUP_Screen.dart';
 import 'package:final_moviles/screens/fitness_app_home_screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
+import 'package:social_login_buttons/social_login_buttons.dart';
 import '../core/animations/Fade_Animation.dart';
 
 enum FormData {
@@ -215,6 +216,65 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         FadeAnimation(
                           delay: 1,
+                          child: SocialLoginButton(
+                              buttonType: SocialLoginButtonType.google,
+                              onPressed: () async {
+                                setState(() {});
+                                await googleAuth
+                                    .signInWithGoogle()
+                                    .then((value) {
+                                  if (value.name != null) {
+                                    Navigator.pop(context);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                FitnessAppHomeScreen()));
+                                    //arguments: value
+                                  } else {
+                                    setState(() {});
+                                    const SnackBar(
+                                      content:
+                                          Text('Verifica tus credenciales'),
+                                    );
+                                  }
+                                });
+                              },
+                              backgroundColor: const Color(0xFF2697FF),
+                              borderRadius: 12),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        FadeAnimation(
+                          delay: 1,
+                          child: SocialLoginButton(
+                              buttonType: SocialLoginButtonType.facebook,
+                              onPressed: () async {
+                                setState(() {});
+                                faceAuth.signInWithFacebook().then((value) {
+                                  if (value.name != null) {
+                                    Navigator.pop(context);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                FitnessAppHomeScreen()));
+                                  } else {
+                                    const SnackBar(
+                                      content:
+                                          Text('Verifica tus credenciales'),
+                                    );
+                                  }
+                                  setState(() {});
+                                });
+                              },
+                              backgroundColor: const Color(0xFF2697FF),
+                              borderRadius: 12),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        FadeAnimation(
+                          delay: 1,
                           child: TextButton(
                               onPressed: () {
                                 setState(() {});
@@ -226,9 +286,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         password: passwordController!.text)
                                     .then((value) {
                                   if (value) {
-                                     Navigator.pop(context);
-                                     Navigator.of(context).push(MaterialPageRoute(
-                                         builder: (_) => FitnessAppHomeScreen()));
+                                    Navigator.pop(context);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                FitnessAppHomeScreen()));
                                   } else {
                                     const SnackBar(
                                       content:

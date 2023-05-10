@@ -46,6 +46,7 @@ dependencies:
   flutter_facebook_auth: ^5.0.8
   simple_animations: ^4.1.0
   supercharged: ^2.1.1
+  social_login_buttons: ^1.0.7
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,6 @@ import 'package:flutter/material.dart';
 
 Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{
-    '/home_fitness': (BuildContext context) => FitnessAppHomeScreen(),
+    '/homefitness': (BuildContext context) => FitnessAppHomeScreen(),
   };
 }
