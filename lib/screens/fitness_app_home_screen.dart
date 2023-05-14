@@ -1,5 +1,6 @@
 import 'package:final_moviles/fitness_app_theme.dart';
 import 'package:final_moviles/models/tabIcon_data.dart';
+import 'package:final_moviles/screens/profile/profile_screen.dart';
 import 'package:final_moviles/screens/training_screen.dart';
 import 'package:final_moviles/widgets/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
           tabIconsList: tabIconsList,
           addClick: () {},
           changeIndex: (int index) {
-            if (index == 0 || index == 2) {
+            if (index == 0) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -89,7 +90,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                       MyDiaryScreen(animationController: animationController);
                 });
               });
-            } else if (index == 1 || index == 3) {
+            } else if (index == 1 || index == 2) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -97,6 +98,16 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                 setState(() {
                   tabBody =
                       TrainingScreen(animationController: animationController);
+                });
+              });
+            } else if (index == 3) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      ProfileScreen(animationController: animationController);
                 });
               });
             }

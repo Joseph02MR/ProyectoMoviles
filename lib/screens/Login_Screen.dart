@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/firebase/facebook_autjentication.dart';
 import 'package:final_moviles/firebase/google_authentication.dart';
@@ -79,10 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         FadeAnimation(
                           delay: 0.8,
-                          child: Image.network(
-                            "https://cdni.iconscout.com/illustration/premium/thumb/job-starting-date-2537382-2146478.png",
-                            width: 100,
-                            height: 100,
+                          child: Image.asset(
+                            "assets/logo.png",
+                            height: 200,
+                            width: 200,
                           ),
                         ),
                         const SizedBox(
@@ -91,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         FadeAnimation(
                           delay: 1,
                           child: const Text(
-                            "Please sign in to continue",
+                            "Por Favor, ingresa para continuar",
                             style: TextStyle(
                                 color: Colors.white, letterSpacing: 0.5),
                           ),
@@ -233,10 +234,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     //arguments: value
                                   } else {
                                     setState(() {});
-                                    const SnackBar(
-                                      content:
-                                          Text('Verifica tus credenciales'),
-                                    );
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.error,
+                                      animType: AnimType.rightSlide,
+                                      title: 'Error de Credenciales',
+                                      desc: 'Verifica tus credenciales',
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {},
+                                    ).show();
                                   }
                                 });
                               },
@@ -260,10 +266,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                             builder: (_) =>
                                                 FitnessAppHomeScreen()));
                                   } else {
-                                    const SnackBar(
-                                      content:
-                                          Text('Verifica tus credenciales'),
-                                    );
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.error,
+                                      animType: AnimType.rightSlide,
+                                      title: 'Error de Credenciales',
+                                      desc: 'Verifica tus credenciales',
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {},
+                                    ).show();
                                   }
                                   setState(() {});
                                 });
@@ -293,18 +304,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                             builder: (_) =>
                                                 FitnessAppHomeScreen()));
                                   } else {
-                                    const SnackBar(
-                                      content:
-                                          Text('Verifica tus credenciales'),
-                                    );
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.error,
+                                      animType: AnimType.rightSlide,
+                                      title: 'Error de Credenciales',
+                                      desc: 'Verifica tus credenciales',
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {},
+                                    ).show();
                                   }
                                 });
                                 // Navigator.pop(context);
                                 // Navigator.of(context).push(MaterialPageRoute(
                                 //     builder: (_) => FitnessAppHomeScreen()));
                               },
-                              child: Text(
-                                "Login",
+                              child: const Text(
+                                "Inicia Sesion",
                                 style: TextStyle(
                                   color: Colors.white,
                                   letterSpacing: 0.5,
@@ -327,8 +343,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 //End of Center Card
                 //Start of outer card
-                
-                 const SizedBox(
+
+                const SizedBox(
                   height: 10,
                 ),
                 FadeAnimation(
@@ -341,7 +357,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return ForgotPasswordScreen();
                       }));
                     }),
-                    child: Text("Can't Log In?",
+                    child: Text("No puedes Ingresar?",
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
                           letterSpacing: 0.5,
@@ -357,7 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("Don't have an account? ",
+                      const Text("No tienes una Cuenta? ",
                           style: TextStyle(
                             color: Colors.grey,
                             letterSpacing: 0.5,
@@ -370,7 +386,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             return SignupScreen();
                           }));
                         },
-                        child: Text("Sign up",
+                        child: Text("Registrate",
                             style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
                                 fontWeight: FontWeight.bold,

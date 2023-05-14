@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:final_moviles/routes.dart';
 import 'package:final_moviles/screens/onboarding.dart';
+import 'package:final_moviles/utils/theme_constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,13 +31,17 @@ class MyApp extends StatelessWidget {
       systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       routes: getApplicationRoutes(),
+      theme: ThemeConstants.lightTheme,
+      darkTheme: ThemeConstants.darkTheme,
+      themeMode: ThemeMode.system,
+      /*
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-      ),
+      ),*/
       home: Onboarding(),
     );
   }

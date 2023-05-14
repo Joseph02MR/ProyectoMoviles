@@ -1,7 +1,10 @@
 import 'package:final_moviles/core/animations/Fade_Animation.dart';
+import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/screens/Login_Screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 enum FormData { Email }
 
@@ -23,6 +26,36 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: dead_code, unused_element
+    Future resetPassword() async {
+      try {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.rightSlide,
+          title: 'Cambio de Contraseña',
+          desc: 'Se envió el formulario de recuperacion a su correo',
+          btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: emailController.text);
+      } on FirebaseAuthException catch (e) {
+        print(e.message);
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          title: 'Error',
+          desc: 'No se pudo enviar el correo',
+          btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+
+        Navigator.of(context).pop();
+      }
+    }
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -66,10 +99,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         FadeAnimation(
                           delay: 0.8,
-                          child: Image.network(
-                            "https://cdni.iconscout.com/illustration/premium/thumb/job-starting-date-2537382-2146478.png",
-                            width: 100,
-                            height: 100,
+                          child: Image.asset(
+                            "assets/logo.png",
+                            height: 200,
+                            width: 200,
                           ),
                         ),
                         const SizedBox(
@@ -79,7 +112,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           delay: 1,
                           child: Container(
                             child: Text(
-                              "Let us help you",
+                              "Permitenos Ayudarte",
                               style: TextStyle(
                                   color: Colors.white.withOpacity(0.9),
                                   letterSpacing: 0.5),
@@ -142,9 +175,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           delay: 1,
                           child: TextButton(
                               onPressed: () {
-                                
+                                resetPassword();
                               },
-                              child: Text(
+                              child: const Text(
                                 "Continue",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -178,7 +211,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("Want to try again? ",
+                      const Text("Intenta Ingresar de nuevo ",
                           style: TextStyle(
                             color: Colors.grey,
                             letterSpacing: 0.5,
@@ -191,7 +224,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             return LoginScreen();
                           }));
                         },
-                        child: Text("Sing in",
+                        child: Text("Ingresar",
                             style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
                                 fontWeight: FontWeight.bold,

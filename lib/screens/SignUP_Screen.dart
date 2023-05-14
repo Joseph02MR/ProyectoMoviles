@@ -77,10 +77,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         children: [
                           FadeAnimation(
                             delay: 0.8,
-                            child: Image.network(
-                              "https://cdni.iconscout.com/illustration/premium/thumb/job-starting-date-2537382-2146478.png",
-                              width: 100,
-                              height: 100,
+                            child: Image.asset(
+                              "assets/logo.png",
+                              height: 200,
+                              width: 200,
                             ),
                           ),
                           const SizedBox(
@@ -90,7 +90,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             delay: 1,
                             child: Container(
                               child: Text(
-                                "Create your account",
+                                "Crea tu Cuenta",
                                 style: TextStyle(
                                     color: Colors.white.withOpacity(0.9),
                                     letterSpacing: 0.5),
@@ -129,7 +129,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         : deaible,
                                     size: 20,
                                   ),
-                                  hintText: 'Full Name',
+                                  hintText: 'Nombre Completo',
                                   hintStyle: TextStyle(
                                       color: selected == FormData.Name
                                           ? enabledtxt
@@ -347,6 +347,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         email: emailController.text.toString(),
                                         password:
                                             passwordController.text.toString());
+
                                     Navigator.pop(context);
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
@@ -355,12 +356,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                          content: Text('Error al Crear cuenta')),
+                                          content:
+                                              Text('Error al Crear cuenta')),
                                     );
                                   }
                                 },
                                 child: Text(
-                                  "Sign Up",
+                                  "Registrate",
                                   style: TextStyle(
                                     color: Colors.white,
                                     letterSpacing: 0.5,
@@ -394,7 +396,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("If you have an account ",
+                      const Text("Si ya tienes una cuenta con nosotros, ",
                           style: TextStyle(
                             color: Colors.grey,
                             letterSpacing: 0.5,
@@ -407,7 +409,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             return LoginScreen();
                           }));
                         },
-                        child: Text("Sing in",
+                        child: Text("Inicia Sesion!",
                             style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
                                 fontWeight: FontWeight.bold,
