@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/firebase/facebook_autjentication.dart';
 import 'package:final_moviles/firebase/google_authentication.dart';
@@ -6,6 +7,7 @@ import 'package:final_moviles/screens/SignUP_Screen.dart';
 import 'package:final_moviles/screens/fitness_app_home_screen.dart';
 import 'package:final_moviles/screens/forgot_password_screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import '../core/animations/Fade_Animation.dart';
@@ -226,6 +228,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                     .signInWithGoogle()
                                     .then((value) {
                                   if (value.name != null) {
+                                    final userId =
+                                        FirebaseAuth.instance.currentUser?.uid;
+                                    final userCollection = FirebaseFirestore
+                                        .instance
+                                        .collection('users');
+                                    final userDocument =
+                                        userCollection.doc(userId);
+                                    userDocument.set({
+                                      'name': value.name,
+                                      'email': value.email,
+                                      'photo': value.photoUrl
+                                      // Add any other user information here
+                                    });
                                     Navigator.pop(context);
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -260,6 +275,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(() {});
                                 faceAuth.signInWithFacebook().then((value) {
                                   if (value.name != null) {
+                                    final userId =
+                                        FirebaseAuth.instance.currentUser?.uid;
+                                    final userCollection = FirebaseFirestore
+                                        .instance
+                                        .collection('users');
+                                    final userDocument =
+                                        userCollection.doc(userId);
+                                    userDocument.set({
+                                      'name': value.name,
+                                      'email': value.email,
+                                      'photo': value.photoUrl
+                                      // Add any other user information here
+                                    });
                                     Navigator.pop(context);
                                     Navigator.of(context).push(
                                         MaterialPageRoute(

@@ -1,9 +1,13 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/fitness_app_home_screen.dart';
 import 'package:final_moviles/screens/Login_Screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import '../core/animations/Fade_Animation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum FormData { Name, Phone, Email, Gender, password, ConfirmPassword }
 
@@ -13,6 +17,10 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   Color enabled = const Color.fromARGB(255, 63, 56, 89);
   Color enabledtxt = Colors.white;
   Color deaible = Colors.grey;
@@ -347,6 +355,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                         email: emailController.text.toString(),
                                         password:
                                             passwordController.text.toString());
+                                    final userId =
+                                        FirebaseAuth.instance.currentUser?.uid;
+                                    final userCollection = FirebaseFirestore
+                                        .instance
+                                        .collection('users');
+                                    final userDocument =
+                                        userCollection.doc(userId);
+
+                                    userDocument.set({
+                                      'name': nameController.text,
+                                      'email': emailController.text,
+                                      'photo':
+                                          'https://api.multiavatar.com/${nameController.text.replaceAll(" ", "")}.png?apikey=Nv1JjlYcTzVS7y',
+                                      // Add any other user information here
+                                    });
 
                                     Navigator.pop(context);
                                     Navigator.of(context).push(
@@ -354,11 +377,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                       return LoginScreen();
                                     }));
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content:
-                                              Text('Error al Crear cuenta')),
-                                    );
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.error,
+                                      animType: AnimType.rightSlide,
+                                      title: 'Creacion de cuenta',
+                                      desc:
+                                          'Ocurrio un errror al crear su cuenta, intentelo de nuevo mas tarde',
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {},
+                                    ).show();
                                   }
                                 },
                                 child: Text(

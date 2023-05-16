@@ -20,5 +20,5 @@ const String tHeight = "Altura";
 const String tAge = "Edad";
 
 //dummies
-const String tFullName = "John Doe";
-const String tEmail = "abuba@itcelaya.edu.mx";
+// const String tFullName = "John Doe";
+// const String tEmail = "abuba@itcelaya.edu.mx";

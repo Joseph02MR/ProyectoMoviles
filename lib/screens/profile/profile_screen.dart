@@ -12,6 +12,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_moviles/controllers/profile_screen_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, this.animationController});
@@ -25,19 +27,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Animation<double>? topBarAnimation;
   GoogleAuth googleAuth = GoogleAuth();
   FaceAuth faceAuth = FaceAuth();
+  String? name;
+  String? email;
 
   final ThemeController _themeController = Get.put(ThemeController());
+  ProfileScreenController dataController = Get.put(ProfileScreenController());
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  void updateController() async {
+    dataController = await Get.to(() => UpdateProfileScreen(
+          controller: dataController,
+        ));
+  }
+
   @override
   void initState() {
+    super.initState();
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    Future<void> getUserData() async {
+      final QuerySnapshot<Map<String, dynamic>> users = await firestore
+          .collection('users')
+          .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
+          .get();
+
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> user
+          in users.docs) {
+        final Map<String, dynamic> data = user.data();
+        dataController.email.value = data['email'];
+        dataController.name.value = data['name'];
+        dataController.photo.value = data['photo'];
+        dataController.id = user.id;
+      }
+    }
+
+    getUserData();
+
     Future<void> _signOut() async {
       await FirebaseAuth.instance.signOut();
       // ignore: use_build_context_synchronously
@@ -49,6 +81,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     var isDark = _themeController.isDarkMode.value;
+
+    final update_screen_params = <String, ProfileScreenController>{
+      'controller': dataController
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -80,43 +116,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: 100,
                     height: 100,
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image(image: AssetImage(tProfileImage))),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: tPrimaryColor),
-                      child: const Icon(
-                        LineAwesomeIcons.alternate_pencil,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      borderRadius: BorderRadius.circular(100),
+                      child: Obx(() => dataController.photo.value != ''
+                          ? Image(
+                              image: NetworkImage(dataController.photo.value))
+                          : const Image(
+                              image: AssetImage(tProfileImage),
+                            )),
                     ),
-                  ),
+                  )
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                tFullName,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Text(
-                tEmail,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              // ignore: unrelated_type_equality_checks
+              Obx(() => Text(
+                    dataController.name.value,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  )),
+              Obx(() => Text(
+                    dataController.email.value,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )),
+
               const SizedBox(height: 20),
               SizedBox(
                 width: 200,
                 child: ElevatedButton(
-                  onPressed: () => Get.to(() => const UpdateProfileScreen()),
+                  onPressed: () {
+                    /*Get.to(() => UpdateProfileScreen(
+                        controller: dataController,
+                      ));*/
+                    updateController();
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: tPrimaryColor,
                       side: BorderSide.none,
