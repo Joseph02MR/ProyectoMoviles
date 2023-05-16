@@ -4,8 +4,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_moviles/controllers/dropdownbutton_controller.dart';
 import 'package:final_moviles/controllers/profile_screen_controller.dart';
+import 'package:final_moviles/core/animations/Fade_Animation.dart';
 import 'package:final_moviles/utils/assets_constants.dart';
 import 'package:final_moviles/utils/color_constants.dart';
+import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:final_moviles/utils/text_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -140,161 +142,255 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           IconButton(onPressed: () {}, icon: const Icon(LineAwesomeIcons.moon))
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Stack(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: const [0.1, 0.4, 0.7, 0.9],
+            colors: [
+              HexColor("#4b4293").withOpacity(0.8),
+              HexColor("#4b4293"),
+              HexColor("#08418e"),
+              HexColor("#08418e")
+            ],
+          ),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
+            image: const NetworkImage(
+              'https://mir-s3-cdn-cf.behance.net/project_modules/fs/01b4bd84253993.5d56acc35e143.jpg',
+            ),
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Obx(() => widget.controller.localPhoto.value.path == '/'
-                      ? SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image(
-                                  image: NetworkImage(
-                                      widget.controller.photo.value))),
-                        )
-                      : SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image(
-                                  image: FileImage(File(widget
-                                      .controller.localPhoto.value.path)))),
-                        )),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: tPrimaryColor),
-                      child: InkWell(
-                        onTap: () {
-                          myAlert();
-                        },
-                        child: const Icon(
-                          LineAwesomeIcons.camera,
-                          color: Colors.black,
-                          size: 20,
+                  Card(
+                    elevation: 5,
+                    color: const Color.fromARGB(255, 171, 211, 250)
+                        .withOpacity(0.4),
+                    child: Stack(
+                      children: [
+                        Obx(() => widget.controller.localPhoto.value.path == '/'
+                            ? SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image(
+                                        image: NetworkImage(
+                                            widget.controller.photo.value))),
+                              )
+                            : SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image(
+                                        image: FileImage(File(widget.controller
+                                            .localPhoto.value.path)))),
+                              )),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: tPrimaryColor),
+                            child: InkWell(
+                              onTap: () {
+                                myAlert();
+                              },
+                              child: const Icon(
+                                LineAwesomeIcons.camera,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Form(
-                  child: Column(
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                        label: Obx(() => Text(widget.controller.name.value)),
-                        prefixIcon: const Icon(Icons.person_outline_rounded)),
-                  ),
                   const SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        label: Text(tAge),
-                        prefixIcon: Icon(Icons.person_outline_rounded)),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        label: Text(tHeight),
-                        prefixIcon: Icon(Icons.person_outline_rounded)),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        label: Text(tWeight),
-                        prefixIcon: Icon(Icons.person_outline_rounded)),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Obx(() => DropdownButtonFormField(
-                        hint: const Text(
-                          'Perfil de actividades ',
-                        ),
-                        onChanged: (newValue) {
-                          drop_con.setSelected(newValue);
-                        },
-                        value: drop_con.selected.value,
-                        items:
-                            list.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      )),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          saveProfile().then((value) => AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.success,
-                                animType: AnimType.rightSlide,
-                                title: 'Edición del perfil',
-                                desc:
-                                    'Se actualizó tu información de manera exitosa',
-                                btnCancelOnPress: () {},
-                                btnOkOnPress: () {
-                                  Get.back(result: widget.controller);
-                                },
-                              ).show());
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: tPrimaryColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder()),
-                        child: const Text(
-                          tEditProfile,
-                          style: TextStyle(color: tDarkColor),
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Row(
+                  Form(
+                      child: Column(
                     children: [
-                      Text.rich(TextSpan(
-                        text: tJoined,
-                        style: TextStyle(fontSize: 12),
+                      FadeAnimation(
+                        delay: 0.8,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                label: Obx(
+                                    () => Text(widget.controller.name.value)),
+                                prefixIcon:
+                                    const Icon(Icons.person_outline_rounded)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      FadeAnimation(
+                        delay: 0.8,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                                label: Text(tAge),
+                                prefixIcon: Icon(Icons.person_outline_rounded)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      FadeAnimation(
+                        delay: 0.8,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Container(
+                            width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                  label: Text(tHeight),
+                                  prefixIcon: Icon(Icons.person_outline_rounded)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      FadeAnimation(
+                        delay: 0.8,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                                label: Text(tWeight),
+                                prefixIcon: Icon(Icons.person_outline_rounded)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      FadeAnimation(
+                        delay: 0.8,
+                        child: Container(
+                          width: 300,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          child: Obx(() => DropdownButtonFormField(
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.person_2_outlined)
+                            ),
+                                hint: const Text(
+                                  'Perfil de actividades ',
+                                ),
+                                onChanged: (newValue) {
+                                  drop_con.setSelected(newValue);
+                                },
+                                value: drop_con.selected.value,
+                                items: list
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              )),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      FadeAnimation(
+                        delay: 0.8,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                saveProfile().then((value) => AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.success,
+                                      animType: AnimType.rightSlide,
+                                      title: 'Edición del perfil',
+                                      desc:
+                                          'Se actualizó tu información de manera exitosa',
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {
+                                        Get.back(result: widget.controller);
+                                      },
+                                    ).show());
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: tPrimaryColor,
+                                  side: BorderSide.none,
+                                  shape: const StadiumBorder()),
+                              child: const Text(
+                                tEditProfile,
+                                style: TextStyle(color: tDarkColor),
+                              )),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Row(
                         children: [
-                          TextSpan(
-                              text: tJoinedAt,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12))
+                          Text.rich(TextSpan(
+                            text: tJoined,
+                            style: TextStyle(fontSize: 12),
+                            children: [
+                              TextSpan(
+                                  text: tJoinedAt,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12))
+                            ],
+                          ))
                         ],
-                      ))
+                      )
                     ],
-                  )
+                  ))
                 ],
-              ))
-            ],
+              ),
+            ),
           ),
         ),
       ),

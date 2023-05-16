@@ -1,4 +1,5 @@
 import 'package:final_moviles/controllers/theme_controller.dart';
+import 'package:final_moviles/core/animations/Fade_Animation.dart';
 import 'package:final_moviles/firebase/facebook_autjentication.dart';
 import 'package:final_moviles/firebase/google_authentication.dart';
 import 'package:final_moviles/screens/Login_Screen.dart';
@@ -112,17 +113,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Stack(
                 children: [
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Obx(() => dataController.photo.value != ''
-                          ? Image(
-                              image: NetworkImage(dataController.photo.value))
-                          : const Image(
-                              image: AssetImage(tProfileImage),
-                            )),
+                  FadeAnimation(
+                    delay: 0.8,
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Obx(() => dataController.photo.value != ''
+                            ? Image(
+                                image: NetworkImage(dataController.photo.value))
+                            : const Image(
+                                image: AssetImage(tProfileImage),
+                              )),
+                      ),
                     ),
                   )
                 ],
@@ -131,32 +135,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: 10,
               ),
               // ignore: unrelated_type_equality_checks
-              Obx(() => Text(
-                    dataController.name.value,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  )),
-              Obx(() => Text(
-                    dataController.email.value,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )),
+              Obx(() => FadeAnimation(
+                delay: 0.8,
+                child: Text(
+                      dataController.name.value,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+              )),
+              Obx(() => FadeAnimation(
+                delay: 0.8,
+                child: Text(
+                      dataController.email.value,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+              )),
 
               const SizedBox(height: 20),
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () {
-                    /*Get.to(() => UpdateProfileScreen(
-                        controller: dataController,
-                      ));*/
-                    updateController();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: tPrimaryColor,
-                      side: BorderSide.none,
-                      shape: const StadiumBorder()),
-                  child: const Text(
-                    tEditProfile,
-                    style: TextStyle(color: tDarkColor),
+              FadeAnimation(
+                delay: 0.9,
+                child: SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      /*Get.to(() => UpdateProfileScreen(
+                          controller: dataController,
+                        ));*/
+                      updateController();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: tPrimaryColor,
+                        side: BorderSide.none,
+                        shape: const StadiumBorder()),
+                    child: const Text(
+                      tEditProfile,
+                      style: TextStyle(color: tDarkColor),
+                    ),
                   ),
                 ),
               ),
@@ -167,61 +180,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ProfileMenuOption(
-                title: tMenu1,
-                icon: LineAwesomeIcons.alternate_sign_out,
-                onPress: () {
-                  try {
-                    _signOut();
-                    googleAuth.signOutWithGoogle().then((value) {
-                      if (value) {
-                        Navigator.pop(context);
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return LoginScreen();
-                        }));
-                      } else {
-                        print('no');
-                      }
-                    });
-                    faceAuth.signOut().then((value) {
-                      if (value) {
-                        Navigator.pop(context);
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return LoginScreen();
-                        }));
-                      } else {
-                        print('no');
-                      }
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                endIcon: false,
-                textColor: Colors.red,
+              FadeAnimation(
+                delay: 0.9,
+                child: ProfileMenuOption(
+                  title: tMenu1,
+                  icon: LineAwesomeIcons.alternate_sign_out,
+                  onPress: () {
+                    try {
+                      _signOut();
+                      googleAuth.signOutWithGoogle().then((value) {
+                        if (value) {
+                          Navigator.pop(context);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return LoginScreen();
+                          }));
+                        } else {
+                          print('no');
+                        }
+                      });
+                      faceAuth.signOut().then((value) {
+                        if (value) {
+                          Navigator.pop(context);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return LoginScreen();
+                          }));
+                        } else {
+                          print('no');
+                        }
+                      });
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  endIcon: false,
+                  textColor: Colors.red,
+                ),
               ),
-              ProfileMenuOption(
-                  title: tMenu2,
-                  icon: LineAwesomeIcons.cog,
-                  onPress: () {},
-                  endIcon: true),
-              ProfileMenuOption(
-                  title: tMenu3,
-                  icon: LineAwesomeIcons.info,
-                  onPress: () {},
-                  endIcon: true),
-              ProfileMenuOption(
-                  title: tMenu4,
-                  icon: LineAwesomeIcons.wallet,
-                  onPress: () {},
-                  endIcon: true),
-              ProfileMenuOption(
-                  title: tMenu5,
-                  icon: LineAwesomeIcons.user_check,
-                  onPress: () {},
-                  endIcon: true),
+              FadeAnimation(
+                delay: 1,
+                child: ProfileMenuOption(
+                    title: tMenu2,
+                    icon: LineAwesomeIcons.cog,
+                    onPress: () {},
+                    endIcon: true),
+              ),
+              FadeAnimation(
+                delay: 1.1,
+                child: ProfileMenuOption(
+                    title: tMenu3,
+                    icon: LineAwesomeIcons.info,
+                    onPress: () {},
+                    endIcon: true),
+              ),
+              FadeAnimation(
+                delay: 1.2,
+                child: ProfileMenuOption(
+                    title: tMenu4,
+                    icon: LineAwesomeIcons.wallet,
+                    onPress: () {},
+                    endIcon: true),
+              ),
+              FadeAnimation(
+                delay: 1.3,
+                child: ProfileMenuOption(
+                    title: tMenu5,
+                    icon: LineAwesomeIcons.user_check,
+                    onPress: () {},
+                    endIcon: true),
+              ),
             ],
           ),
         ),
