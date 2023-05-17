@@ -7,7 +7,6 @@ import 'package:final_moviles/screens/profile/update_profile_screen.dart';
 import 'package:final_moviles/utils/assets_constants.dart';
 import 'package:final_moviles/utils/color_constants.dart';
 import 'package:final_moviles/utils/text_constants.dart';
-import 'package:final_moviles/utils/theme_constants.dart';
 import 'package:final_moviles/widgets/profile/profile_menu_option.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: const Icon(LineAwesomeIcons.angle_left),
         ),
         title:
-            Text(tProfile, style: Theme.of(context).textTheme.headlineMedium),
+            Text(tProfile, style: Theme.of(context).textTheme.headlineSmall),
         actions: [
           IconButton(
               onPressed: () {

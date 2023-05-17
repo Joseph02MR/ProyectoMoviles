@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_moviles/controllers/dropdownbutton_controller.dart';
 import 'package:final_moviles/controllers/profile_screen_controller.dart';
 import 'package:final_moviles/core/animations/Fade_Animation.dart';
-import 'package:final_moviles/utils/assets_constants.dart';
 import 'package:final_moviles/utils/color_constants.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:final_moviles/utils/text_constants.dart';
@@ -133,7 +132,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () => Get.back(result: widget.controller),
           icon: const Icon(LineAwesomeIcons.angle_left),
         ),
         title: Text(tEditProfile,
@@ -274,14 +273,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           ),
                           child: Container(
                             width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
                             child: TextFormField(
                               decoration: const InputDecoration(
                                   label: Text(tHeight),
-                                  prefixIcon: Icon(Icons.person_outline_rounded)),
+                                  prefixIcon:
+                                      Icon(Icons.person_outline_rounded)),
                             ),
                           ),
                         ),
@@ -311,14 +311,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         delay: 0.8,
                         child: Container(
                           width: 300,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
                           child: Obx(() => DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.person_2_outlined)
-                            ),
+                                decoration: const InputDecoration(
+                                    prefixIcon: Icon(Icons.person_2_outlined)),
                                 hint: const Text(
                                   'Perfil de actividades ',
                                 ),
@@ -326,8 +325,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   drop_con.setSelected(newValue);
                                 },
                                 value: drop_con.selected.value,
-                                items: list
-                                    .map<DropdownMenuItem<String>>((String value) {
+                                items: list.map<DropdownMenuItem<String>>(
+                                    (String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),
