@@ -3,6 +3,7 @@ import 'package:final_moviles/models/tabIcon_data.dart';
 import 'package:final_moviles/screens/profile/profile_screen.dart';
 import 'package:final_moviles/screens/training_screen.dart';
 import 'package:final_moviles/widgets/bottom_navigation_view/bottom_bar_view.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'my_diary/my_diary_screen.dart';
 
@@ -40,8 +41,33 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
     super.dispose();
   }
 
+  void enableNotifs() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
+    enableNotifs();
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(

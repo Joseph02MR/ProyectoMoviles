@@ -1,5 +1,4 @@
 import 'package:final_moviles/core/animations/Fade_Animation.dart';
-import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/screens/Login_Screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
