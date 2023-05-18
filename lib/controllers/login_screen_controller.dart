@@ -1,9 +1,14 @@
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  static LoginController get to => Get.find();
+  var selected = "email".obs;
+  var ispasswordev = true.obs;
 
-  FormData? selected = FormData(Map.from({}));
+  void setSelected(value) {
+    selected.value = value;
+  }
 
-  
+  void setViewablePass() {
+    ispasswordev.value = ispasswordev.isTrue ? false : true;
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_moviles/controllers/login_screen_controller.dart';
 import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/firebase/facebook_autjentication.dart';
 import 'package:final_moviles/firebase/google_authentication.dart';
@@ -9,6 +10,7 @@ import 'package:final_moviles/screens/forgot_password_screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import '../core/animations/Fade_Animation.dart';
 
@@ -27,15 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Color enabledtxt = Colors.white;
   Color deaible = Colors.grey;
   Color backgroundColor = const Color(0xFF1F1A30);
-  bool ispasswordev = true;
-  FormData? selected;
 
   Emailuth emailAuth = Emailuth();
   GoogleAuth googleAuth = GoogleAuth();
   FaceAuth faceAuth = FaceAuth();
 
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  LoginController loginCon = LoginController();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -102,119 +104,122 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        FadeAnimation(
-                          delay: 1,
-                          child: Container(
-                            width: 300,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                              color: selected == FormData.Email
-                                  ? enabled
-                                  : backgroundColor,
-                            ),
-                            padding: const EdgeInsets.all(5.0),
-                            child: TextField(
-                              controller: emailController,
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.Email;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                border: InputBorder.none,
-                                prefixIcon: Icon(
-                                  Icons.email_outlined,
-                                  color: selected == FormData.Email
-                                      ? enabledtxt
-                                      : deaible,
-                                  size: 20,
+                        Obx(() => FadeAnimation(
+                              delay: 1,
+                              child: Container(
+                                width: 300,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  color: loginCon.selected.value == 'email'
+                                      ? enabled
+                                      : backgroundColor,
                                 ),
-                                hintText: 'Email',
-                                hintStyle: TextStyle(
-                                    color: selected == FormData.Email
-                                        ? enabledtxt
-                                        : deaible,
-                                    fontSize: 12),
+                                padding: const EdgeInsets.all(5.0),
+                                child: TextField(
+                                  controller: emailController,
+                                  onTap: () {
+                                    loginCon.setSelected('email');
+                                  },
+                                  decoration: InputDecoration(
+                                    enabledBorder: InputBorder.none,
+                                    border: InputBorder.none,
+                                    prefixIcon: Icon(
+                                      Icons.email_outlined,
+                                      color: loginCon.selected.value == 'email'
+                                          ? enabledtxt
+                                          : deaible,
+                                      size: 20,
+                                    ),
+                                    hintText: 'Email',
+                                    hintStyle: TextStyle(
+                                        color:
+                                            loginCon.selected.value == 'email'
+                                                ? enabledtxt
+                                                : deaible,
+                                        fontSize: 12),
+                                  ),
+                                  textAlignVertical: TextAlignVertical.center,
+                                  style: TextStyle(
+                                      color: loginCon.selected.value == 'email'
+                                          ? enabledtxt
+                                          : deaible,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                ),
                               ),
-                              textAlignVertical: TextAlignVertical.center,
-                              style: TextStyle(
-                                  color: selected == FormData.Email
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
+                            )),
                         const SizedBox(
                           height: 20,
                         ),
-                        FadeAnimation(
-                          delay: 1,
-                          child: Container(
-                            width: 300,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.0),
-                                color: selected == FormData.password
-                                    ? enabled
-                                    : backgroundColor),
-                            padding: const EdgeInsets.all(5.0),
-                            child: TextField(
-                              controller: passwordController,
-                              onTap: () {
-                                setState(() {
-                                  selected = FormData.password;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  enabledBorder: InputBorder.none,
-                                  border: InputBorder.none,
-                                  prefixIcon: Icon(
-                                    Icons.lock_open_outlined,
-                                    color: selected == FormData.password
-                                        ? enabledtxt
-                                        : deaible,
-                                    size: 20,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: ispasswordev
-                                        ? Icon(
-                                            Icons.visibility_off,
-                                            color: selected == FormData.password
-                                                ? enabledtxt
-                                                : deaible,
-                                            size: 20,
-                                          )
-                                        : Icon(
-                                            Icons.visibility,
-                                            color: selected == FormData.password
-                                                ? enabledtxt
-                                                : deaible,
-                                            size: 20,
-                                          ),
-                                    onPressed: () => setState(
-                                        () => ispasswordev = !ispasswordev),
-                                  ),
-                                  hintText: 'Password',
-                                  hintStyle: TextStyle(
-                                      color: selected == FormData.password
-                                          ? enabledtxt
-                                          : deaible,
-                                      fontSize: 12)),
-                              obscureText: ispasswordev,
-                              textAlignVertical: TextAlignVertical.center,
-                              style: TextStyle(
-                                  color: selected == FormData.password
-                                      ? enabledtxt
-                                      : deaible,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ),
+                        Obx(() => FadeAnimation(
+                              delay: 1,
+                              child: Container(
+                                width: 300,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    color: loginCon.selected.value == 'email'
+                                        ? enabled
+                                        : backgroundColor),
+                                padding: const EdgeInsets.all(5.0),
+                                child: TextField(
+                                  controller: passwordController,
+                                  onTap: () {
+                                    loginCon.setSelected('password');
+                                  },
+                                  decoration: InputDecoration(
+                                      enabledBorder: InputBorder.none,
+                                      border: InputBorder.none,
+                                      prefixIcon: Icon(
+                                        Icons.lock_open_outlined,
+                                        color: loginCon.selected.value ==
+                                                'password'
+                                            ? enabledtxt
+                                            : deaible,
+                                        size: 20,
+                                      ),
+                                      suffixIcon: IconButton(
+                                          icon: loginCon.ispasswordev.value
+                                              ? Icon(
+                                                  Icons.visibility_off,
+                                                  color:
+                                                      loginCon.selected.value ==
+                                                              'password'
+                                                          ? enabledtxt
+                                                          : deaible,
+                                                  size: 20,
+                                                )
+                                              : Icon(
+                                                  Icons.visibility,
+                                                  color:
+                                                      loginCon.selected.value ==
+                                                              'password'
+                                                          ? enabledtxt
+                                                          : deaible,
+                                                  size: 20,
+                                                ),
+                                          onPressed: () =>
+                                              loginCon.setViewablePass()),
+                                      hintText: 'Password',
+                                      hintStyle: TextStyle(
+                                          color: loginCon.selected.value ==
+                                                  'password'
+                                              ? enabledtxt
+                                              : deaible,
+                                          fontSize: 12)),
+                                  obscureText: loginCon.ispasswordev.value,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  style: TextStyle(
+                                      color:
+                                          loginCon.selected.value == 'password'
+                                              ? enabledtxt
+                                              : deaible,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            )),
                         const SizedBox(
                           height: 20,
                         ),
@@ -347,6 +352,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // Navigator.of(context).push(MaterialPageRoute(
                                 //     builder: (_) => FitnessAppHomeScreen()));
                               },
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Color(0xFF2697FF),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14.0, horizontal: 80),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12.0))),
                               child: const Text(
                                 "Inicia Sesion",
                                 style: TextStyle(
@@ -355,14 +367,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Color(0xFF2697FF),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 14.0, horizontal: 80),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)))),
+                              )),
                         ),
                       ],
                     ),
