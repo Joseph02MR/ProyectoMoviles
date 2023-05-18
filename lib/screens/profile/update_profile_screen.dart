@@ -27,10 +27,10 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController wightController = new TextEditingController();
-  TextEditingController heightController = new TextEditingController();
-  TextEditingController ageController = new TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController wightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
   
   
   var logger = Logger(
@@ -70,10 +70,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       logger.w(e);
     }
 
-    final usermail = FirebaseAuth.instance.currentUser?.email;
     final userCollection = FirebaseFirestore.instance.collection('users');
-
-    final userdoc = userCollection.where('email', isEqualTo: usermail);
 
     var selectedProfile = getSelectedProfile(drop_con);
 
@@ -149,8 +146,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     return false; //<-- SEE HERE
   }
 
-  Map<String, dynamic> getSelectedProfile(DropdownButtonController drop_con) {
-    String aux = drop_con.selected.value;
+  Map<String, dynamic> getSelectedProfile(DropdownButtonController dropCon) {
+    String aux = dropCon.selected.value;
 
     for (var element in profiles) {
       if (element['name'] == aux) {
@@ -162,10 +159,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DropdownButtonController drop_con = DropdownButtonController();
+    DropdownButtonController dropCon = DropdownButtonController();
 
     List<String> list = List.from(profiles.map((e) => e['name']));
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     //getUserData();
 
@@ -376,9 +372,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     'Perfil de actividades ',
                                   ),
                                   onChanged: (newValue) {
-                                    drop_con.setSelected(newValue);
+                                    dropCon.setSelected(newValue);
                                   },
-                                  value: drop_con.selected.value,
+                                  value: dropCon.selected.value,
                                   items: list.map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(
@@ -398,7 +394,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             width: double.infinity,
                             child: ElevatedButton(
                                 onPressed: () {
-                                  saveProfile(drop_con)
+                                  saveProfile(dropCon)
                                       .then((value) => AwesomeDialog(
                                             context: context,
                                             dialogType: DialogType.success,

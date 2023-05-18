@@ -6,6 +6,7 @@ import 'package:final_moviles/screens/training_screen.dart';
 import 'package:final_moviles/widgets/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'my_diary/my_diary_screen.dart';
 
 class FitnessAppHomeScreen extends StatefulWidget {
@@ -23,6 +24,10 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
     color: FitnessAppTheme.background,
   );
 
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   @override
   void initState() {
     tabIconsList.forEach((TabIconData tab) {
@@ -33,6 +38,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     tabBody = MyDiaryScreen(animationController: animationController);
+    enableNotifs();
     super.initState();
   }
 
@@ -56,19 +62,18 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      logger.i('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      logger.i('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      logger.w('User declined or has not accepted permission');
     }
     final fcmToken = await FirebaseMessaging.instance.getToken();
   }
 
   @override
   Widget build(BuildContext context) {
-    enableNotifs();
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
