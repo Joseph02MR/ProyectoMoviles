@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_moviles/controllers/dropdownbutton_controller.dart';
 import 'package:final_moviles/controllers/profile_screen_controller.dart';
 import 'package:final_moviles/core/animations/Fade_Animation.dart';
+import 'package:final_moviles/models/profile_activities.dart';
 import 'package:final_moviles/utils/color_constants.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:final_moviles/utils/text_constants.dart';
@@ -25,6 +26,13 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController wightController = new TextEditingController();
+  TextEditingController heightController = new TextEditingController();
+  TextEditingController ageController = new TextEditingController();
+  
+  
   var logger = Logger(
     printer: PrettyPrinter(),
   );
@@ -41,17 +49,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     widget.controller.setImage(img);
   }
 
-  Future<void> saveProfile() async {
+  Future<void> saveProfile(DropdownButtonController drop_con) async {
     // Create a storage reference from our app
-    final storageRef = FirebaseStorage.instance.ref();
-
-// Create a reference to "mountains.jpg"
-    final mountainsRef =
-        storageRef.child('${widget.controller.id}/profile.png');
-
-    String imageUrl = await mountainsRef.getDownloadURL();
+    String imageUrl = "";
 
     try {
+      final storageRef = FirebaseStorage.instance.ref();
+
+// Create a reference to "mountains.jpg"
+      final mountainsRef =
+          storageRef.child('${widget.controller.id}/profile.png');
+
+      imageUrl = await mountainsRef.getDownloadURL();
+
       if (widget.controller.localPhoto.value.path != '/') {
         await mountainsRef
             .putFile(File(widget.controller.localPhoto.value.path));
@@ -65,14 +75,29 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
     final userdoc = userCollection.where('email', isEqualTo: usermail);
 
+    var selectedProfile = getSelectedProfile(drop_con);
+
     //userCollection.doc(usermail).update({
-    userCollection.doc(widget.controller.id).update({
-      'name': widget.controller.name.value,
-      'photo': widget.controller.localPhoto.value.path != '/'
-          ? imageUrl
-          : widget.controller.photo,
-      // Add any other user information here
-    });
+    widget.controller.localPhoto.value.path != '/'
+        ? userCollection.doc(widget.controller.id).update({
+            'name': nameController.text,
+            'photo': imageUrl,
+            'watergoal': selectedProfile['water_goal'],
+            'sleepgoal': selectedProfile['sleep_goal'],
+            'calgoal': selectedProfile['carbs_goal'],
+            'age': ageController.text,
+            'weight': wightController.text,
+            'height': heightController.text
+          })
+        : userCollection.doc(widget.controller.id).update({
+            'name': nameController.text,
+            'watergoal': selectedProfile['water_goal'],
+            'sleepgoal': selectedProfile['sleep_goal'],
+            'calgoal': selectedProfile['carbs_goal'],
+            'age': ageController.text,
+            'weight': wightController.text,
+            'height': heightController.text
+          });
   }
 
   void myAlert() {
@@ -120,157 +145,135 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         });
   }
 
+  Future<bool> _onWillPop() async {
+    return false; //<-- SEE HERE
+  }
+
+  Map<String, dynamic> getSelectedProfile(DropdownButtonController drop_con) {
+    String aux = drop_con.selected.value;
+
+    for (var element in profiles) {
+      if (element['name'] == aux) {
+        return element;
+      }
+    }
+    return Map.from({});
+  }
+
   @override
   Widget build(BuildContext context) {
     DropdownButtonController drop_con = DropdownButtonController();
 
-    const List<String> list = <String>['Kek', 'One', 'Two', 'Three', 'Four'];
+    List<String> list = List.from(profiles.map((e) => e['name']));
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     //getUserData();
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(result: widget.controller),
-          icon: const Icon(LineAwesomeIcons.angle_left),
-        ),
-        title: Text(tEditProfile,
-            style: Theme.of(context).textTheme.displayMedium),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(LineAwesomeIcons.moon))
-        ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: const [0.1, 0.4, 0.7, 0.9],
-            colors: [
-              HexColor("#4b4293").withOpacity(0.8),
-              HexColor("#4b4293"),
-              HexColor("#08418e"),
-              HexColor("#08418e")
-            ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Get.back(result: widget.controller),
+            icon: const Icon(LineAwesomeIcons.angle_left),
           ),
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
-            image: const NetworkImage(
-              'https://mir-s3-cdn-cf.behance.net/project_modules/fs/01b4bd84253993.5d56acc35e143.jpg',
+          title: Text(tEditProfile,
+              style: Theme.of(context).textTheme.displaySmall),
+          actions: [
+            IconButton(
+                onPressed: () {}, icon: const Icon(LineAwesomeIcons.moon))
+          ],
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: const [0.1, 0.4, 0.7, 0.9],
+              colors: [
+                HexColor("#4b4293").withOpacity(0.8),
+                HexColor("#4b4293"),
+                HexColor("#08418e"),
+                HexColor("#08418e")
+              ],
+            ),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
+              image: const NetworkImage(
+                'https://mir-s3-cdn-cf.behance.net/project_modules/fs/01b4bd84253993.5d56acc35e143.jpg',
+              ),
             ),
           ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Card(
-                    elevation: 5,
-                    color: const Color.fromARGB(255, 171, 211, 250)
-                        .withOpacity(0.4),
-                    child: Stack(
-                      children: [
-                        Obx(() => widget.controller.localPhoto.value.path == '/'
-                            ? SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Image(
-                                        image: NetworkImage(
-                                            widget.controller.photo.value))),
-                              )
-                            : SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Image(
-                                        image: FileImage(File(widget.controller
-                                            .localPhoto.value.path)))),
-                              )),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: tPrimaryColor),
-                            child: InkWell(
-                              onTap: () {
-                                myAlert();
-                              },
-                              child: const Icon(
-                                LineAwesomeIcons.camera,
-                                color: Colors.black,
-                                size: 20,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Card(
+                      elevation: 5,
+                      color: const Color.fromARGB(255, 171, 211, 250)
+                          .withOpacity(0.4),
+                      child: Stack(
+                        children: [
+                          Obx(() => widget.controller.localPhoto.value.path ==
+                                  '/'
+                              ? SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Image(
+                                          image: NetworkImage(
+                                              widget.controller.photo.value))),
+                                )
+                              : SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Image(
+                                          image: FileImage(File(widget
+                                              .controller
+                                              .localPhoto
+                                              .value
+                                              .path)))),
+                                )),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: tPrimaryColor),
+                              child: InkWell(
+                                onTap: () {
+                                  myAlert();
+                                },
+                                child: const Icon(
+                                  LineAwesomeIcons.camera,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Form(
-                      child: Column(
-                    children: [
-                      FadeAnimation(
-                        delay: 0.8,
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                label: Obx(
-                                    () => Text(widget.controller.name.value)),
-                                prefixIcon:
-                                    const Icon(Icons.person_outline_rounded)),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      FadeAnimation(
-                        delay: 0.8,
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                                label: Text(tAge),
-                                prefixIcon: Icon(Icons.person_outline_rounded)),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      FadeAnimation(
-                        delay: 0.8,
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Form(
+                        child: Column(
+                      children: [
+                        FadeAnimation(
+                          delay: 0.8,
                           child: Container(
                             width: 300,
                             height: 60,
@@ -278,116 +281,170 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: TextFormField(
+                              controller: nameController,
+                              decoration: InputDecoration(
+                                  label: Obx(
+                                      () => Text(widget.controller.name.value)),
+                                  prefixIcon:
+                                      const Icon(Icons.person_outline_rounded)),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        FadeAnimation(
+                          delay: 0.8,
+                          child: Container(
+                            width: 300,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: TextFormField(
+                              controller: ageController,
                               decoration: const InputDecoration(
-                                  label: Text(tHeight),
+                                  label: Text(tAge),
                                   prefixIcon:
                                       Icon(Icons.person_outline_rounded)),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      FadeAnimation(
-                        delay: 0.8,
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                                label: Text(tWeight),
-                                prefixIcon: Icon(Icons.person_outline_rounded)),
-                          ),
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      FadeAnimation(
-                        delay: 0.8,
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Obx(() => DropdownButtonFormField(
+                        FadeAnimation(
+                          delay: 0.8,
+                          child: Container(
+                            width: 300,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Container(
+                              width: 300,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: TextFormField(
+                                controller: heightController,
                                 decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.person_2_outlined)),
-                                hint: const Text(
-                                  'Perfil de actividades ',
-                                ),
-                                onChanged: (newValue) {
-                                  drop_con.setSelected(newValue);
+                                    label: Text(tHeight),
+                                    prefixIcon:
+                                        Icon(Icons.person_outline_rounded)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        FadeAnimation(
+                          delay: 0.8,
+                          child: Container(
+                            width: 300,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: TextFormField(
+                              controller: wightController,
+                              decoration: const InputDecoration(
+                                  label: Text(tWeight),
+                                  prefixIcon:
+                                      Icon(Icons.person_outline_rounded)),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        FadeAnimation(
+                          delay: 0.8,
+                          child: Container(
+                            width: 300,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Obx(() => DropdownButtonFormField(
+                                  decoration: const InputDecoration(
+                                      prefixIcon:
+                                          Icon(Icons.person_2_outlined)),
+                                  hint: const Text(
+                                    'Perfil de actividades ',
+                                  ),
+                                  onChanged: (newValue) {
+                                    drop_con.setSelected(newValue);
+                                  },
+                                  value: drop_con.selected.value,
+                                  items: list.map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        FadeAnimation(
+                          delay: 0.8,
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  saveProfile(drop_con)
+                                      .then((value) => AwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.success,
+                                            animType: AnimType.rightSlide,
+                                            title: 'Edición del perfil',
+                                            desc:
+                                                'Se actualizó tu información de manera exitosa',
+                                            btnCancelOnPress: () {},
+                                            btnOkOnPress: () {
+                                              Get.back(
+                                                  result: widget.controller);
+                                            },
+                                          ).show());
                                 },
-                                value: drop_con.selected.value,
-                                items: list.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              )),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: tPrimaryColor,
+                                    side: BorderSide.none,
+                                    shape: const StadiumBorder()),
+                                child: const Text(
+                                  tEditProfile,
+                                  style: TextStyle(color: tDarkColor),
+                                )),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      FadeAnimation(
-                        delay: 0.8,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                saveProfile().then((value) => AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.success,
-                                      animType: AnimType.rightSlide,
-                                      title: 'Edición del perfil',
-                                      desc:
-                                          'Se actualizó tu información de manera exitosa',
-                                      btnCancelOnPress: () {},
-                                      btnOkOnPress: () {
-                                        Get.back(result: widget.controller);
-                                      },
-                                    ).show());
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: tPrimaryColor,
-                                  side: BorderSide.none,
-                                  shape: const StadiumBorder()),
-                              child: const Text(
-                                tEditProfile,
-                                style: TextStyle(color: tDarkColor),
-                              )),
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Row(
-                        children: [
-                          Text.rich(TextSpan(
-                            text: tJoined,
-                            style: TextStyle(fontSize: 12),
-                            children: [
-                              TextSpan(
-                                  text: tJoinedAt,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12))
-                            ],
-                          ))
-                        ],
-                      )
-                    ],
-                  ))
-                ],
+                        const Row(
+                          children: [
+                            Text.rich(TextSpan(
+                              text: tJoined,
+                              style: TextStyle(fontSize: 12),
+                              children: [
+                                TextSpan(
+                                    text: tJoinedAt,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12))
+                              ],
+                            ))
+                          ],
+                        )
+                      ],
+                    ))
+                  ],
+                ),
               ),
             ),
           ),
