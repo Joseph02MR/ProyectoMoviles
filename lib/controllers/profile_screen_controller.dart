@@ -7,11 +7,26 @@ class ProfileScreenController {
   var photo = ''.obs;
   var localPhoto = XFile('/').obs;
   var id = "";
+  var age = ''.obs;
+  var height = ''.obs;
+  var weight = ''.obs;
+  var wgoal = ''.obs;
+  var sgoal =''.obs;
+  var cgoal =''.obs;
+  var wardaily = ''.obs;
 
-  void setData(em, na, ph) {
+
+  void setData(em, na, ph, ag, he, we, wg, sg, cg, wd) {
     email.value = em;
     name.value = na;
     photo.value = ph;
+    age.value = ag;
+    height.value = he;
+    weight.value = we;
+    wgoal.value = wg;
+    sgoal.value = sg;
+    cgoal.value = cg;
+    wardaily.value = wd;
   }
 
   void setImage(photo) {
