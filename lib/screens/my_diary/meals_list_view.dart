@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../fitness_app_theme.dart';
-import '../../main.dart';
 import '../../models/meals_list_data.dart';
 import '../../utils/hexcolor.dart';
 
@@ -49,7 +48,7 @@ class _MealsListViewState extends State<MealsListView>
           child: Transform(
             transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
-            child: Container(
+            child: SizedBox(
               height: 216,
               width: double.infinity,
               child: ListView.builder(
@@ -214,7 +213,7 @@ class MealsView extends StatelessWidget {
                                         BoxShadow(
                                             color: FitnessAppTheme.nearlyBlack
                                                 .withOpacity(0.4),
-                                            offset: Offset(8.0, 8.0),
+                                            offset: const Offset(8.0, 8.0),
                                             blurRadius: 8.0),
                                       ],
                                     ),
