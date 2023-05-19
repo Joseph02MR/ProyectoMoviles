@@ -368,6 +368,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       'email': emailController.text,
                                       'photo':
                                           'https://api.multiavatar.com/${nameController.text.replaceAll(" ", "")}.png?apikey=Nv1JjlYcTzVS7y',
+                                      'waterdaily':0
                                       // Add any other user information here
                                     });
 
