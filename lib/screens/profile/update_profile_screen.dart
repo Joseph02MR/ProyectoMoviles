@@ -78,36 +78,36 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             'photo': imageUrl,
             'name': nameController.text != ""
                 ? nameController.text
-                : widget.controller.name,
+                : widget.controller.name.value,
             'watergoal': selectedProfile['water_goal'],
             'sleepgoal': selectedProfile['sleep_goal'],
             'calgoal': selectedProfile['carbs_goal'],
             'age': ageController.text != ""
                 ? ageController.text
-                : widget.controller.age,
+                : widget.controller.age.value,
             'weight': weightController.text != ""
                 ? weightController.text
-                : widget.controller.weight,
+                : widget.controller.weight.value,
             'height': heightController.text != ""
                 ? heightController.text
-                : widget.controller.height
+                : widget.controller.height.value
           })
         : userCollection.doc(widget.controller.id).update({
             'name': nameController.text != ""
                 ? nameController.text
-                : widget.controller.name,
+                : widget.controller.name.value,
             'watergoal': selectedProfile['water_goal'],
             'sleepgoal': selectedProfile['sleep_goal'],
             'calgoal': selectedProfile['carbs_goal'],
             'age': ageController.text != ""
                 ? ageController.text
-                : widget.controller.age,
+                : widget.controller.age.value,
             'weight': weightController.text != ""
                 ? weightController.text
-                : widget.controller.weight,
+                : widget.controller.weight.value,
             'height': heightController.text != ""
                 ? heightController.text
-                : widget.controller.height
+                : widget.controller.height.value
           });
   }
 

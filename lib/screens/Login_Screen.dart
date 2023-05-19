@@ -49,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     List signedMethods =
         await FirebaseAuth.instance.fetchSignInMethodsForEmail(value.email!);
     if (signedMethods.isNotEmpty) {
+      logger.i(signedMethods.toString());
       return true;
     }
     return false;
@@ -268,12 +269,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                 final userCollection = FirebaseFirestore
                                     .instance
                                     .collection('users');
-                                final userDocument = userCollection.doc(userId);
 
+                                final userDocument = userCollection.doc(userId);
+                                final FirebaseFirestore firestore =
+                                    FirebaseFirestore.instance;
+
+                                final QuerySnapshot<Map<String, dynamic>>
+                                    users = await firestore
+                                        .collection('users')
+                                        .where('email',
+                                            isEqualTo: FirebaseAuth
+                                                .instance.currentUser?.email)
+                                        .get();
+                                Map<String, dynamic> data = Map.from({});
+                                for (final QueryDocumentSnapshot<
+                                    Map<String, dynamic>> user in users.docs) {
+                                  data = user.data();
+                                }
+
+                                // bool condition =
+                                //     await checkIfAlreadySignedInWithProvider(
+                                //         aux);
                                 if (aux != null) {
-                                  if (await checkIfAlreadySignedInWithProvider(
-                                      aux)) {
-                                    userDocument.update({
+                                  logger.i("$aux  ${aux?.email}");
+                                  if (data["email"] != '') {
+                                    
+                                  }else{
+                                    logger.i('registered in firestore');
+                                    userDocument.set({
                                       'name': aux!.name,
                                       'email': aux!.email,
                                       'photo': aux!.photoUrl,
