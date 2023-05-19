@@ -53,13 +53,17 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
           ? aux.toString()
           : watervalue.toString()
     });
+
+    dataController.setWaterValue(dataController.wardaily.value != ''
+        ? aux.toString()
+        : watervalue.toString());
   }
 
   void myAlert() {
-    dataController.wardaily.value != '' 
-    ? aux = dataController.wardaily.value.toInt()!
-    : aux = watervalue;
-    
+    dataController.wardaily.value != ''
+        ? aux = dataController.wardaily.value.toInt()!
+        : aux = watervalue;
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -76,7 +80,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                   children: <Widget>[
                     Container(
                       height: 180,
-                      child: Expanded(
+                      child: Container(
                         child: Row(
                           children: <Widget>[
                             Column(
@@ -232,25 +236,21 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: Flexible(
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              saveWater();
-                                              AwesomeDialog(
-                                                context: context,
-                                                dialogType: DialogType.success,
-                                                animType: AnimType.rightSlide,
-                                                title: 'Hidratacion',
-                                                desc:
-                                                    'Tu progreso fue registrado',
-                                                btnOkOnPress: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ).show();
-                                            },
-                                            child: const Text("Guardar"))),
-                                  ),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        saveWater();
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.success,
+                                          animType: AnimType.rightSlide,
+                                          title: 'Hidratacion',
+                                          desc: 'Tu progreso fue registrado',
+                                          btnOkOnPress: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ).show();
+                                      },
+                                      child: const Text("Guardar")),
                                 )
                               ],
                             ),
@@ -365,33 +365,35 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 4, bottom: 3),
-                                        child: Obx(() => dataController
-                                                    .wardaily.value !=
-                                                ''
-                                            ? Text(
-                                                dataController.wardaily.value,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  fontFamily:
-                                                      FitnessAppTheme.fontName,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 32,
-                                                  color: FitnessAppTheme
-                                                      .nearlyDarkBlue,
-                                                ),
-                                              )
-                                            : Text(
-                                                watervalue.toString(),
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  fontFamily:
-                                                      FitnessAppTheme.fontName,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 32,
-                                                  color: FitnessAppTheme
-                                                      .nearlyDarkBlue,
-                                                ),
-                                              )),
+                                        child: Obx(() {
+                                          return dataController
+                                                      .wardaily.value !=
+                                                  ''
+                                              ? Text(
+                                                  dataController.wardaily.value,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontFamily: FitnessAppTheme
+                                                        .fontName,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 32,
+                                                    color: FitnessAppTheme
+                                                        .nearlyDarkBlue,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  watervalue.toString(),
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontFamily: FitnessAppTheme
+                                                        .fontName,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 32,
+                                                    color: FitnessAppTheme
+                                                        .nearlyDarkBlue,
+                                                  ),
+                                                );
+                                        }),
                                       ),
                                       const Padding(
                                         padding:

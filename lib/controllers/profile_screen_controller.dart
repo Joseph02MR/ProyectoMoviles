@@ -11,10 +11,9 @@ class ProfileScreenController {
   var height = ''.obs;
   var weight = ''.obs;
   var wgoal = ''.obs;
-  var sgoal =''.obs;
-  var cgoal =''.obs;
+  var sgoal = ''.obs;
+  var cgoal = ''.obs;
   var wardaily = ''.obs;
-
 
   void setData(em, na, ph, ag, he, we, wg, sg, cg, wd) {
     email.value = em;
@@ -31,5 +30,9 @@ class ProfileScreenController {
 
   void setImage(photo) {
     localPhoto.value = photo;
+  }
+
+  void setWaterValue(value) {
+    wardaily.value = value;
   }
 }
