@@ -228,7 +228,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: SocialLoginButton(
                               buttonType: SocialLoginButtonType.google,
                               onPressed: () async {
-                                setState(() {});
                                 await googleAuth
                                     .signInWithGoogle()
                                     .then((value) {
@@ -246,14 +245,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'photo': value.photoUrl
                                       // Add any other user information here
                                     });
-                                    Navigator.pop(context);
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                FitnessAppHomeScreen()));
+                                    Get.back();
+                                    Get.to(() => FitnessAppHomeScreen());
                                     //arguments: value
                                   } else {
-                                    setState(() {});
                                     AwesomeDialog(
                                       context: context,
                                       dialogType: DialogType.error,
@@ -277,7 +272,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: SocialLoginButton(
                               buttonType: SocialLoginButtonType.facebook,
                               onPressed: () async {
-                                setState(() {});
                                 faceAuth.signInWithFacebook().then((value) {
                                   if (value.name != null) {
                                     final userId =
@@ -293,11 +287,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'photo': value.photoUrl
                                       // Add any other user information here
                                     });
-                                    Navigator.pop(context);
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                FitnessAppHomeScreen()));
+                                    Get.back();
+                                    Get.to(() => FitnessAppHomeScreen());
                                   } else {
                                     AwesomeDialog(
                                       context: context,
@@ -309,7 +300,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       btnOkOnPress: () {},
                                     ).show();
                                   }
-                                  setState(() {});
                                 });
                               },
                               backgroundColor: const Color(0xFF2697FF),
@@ -322,7 +312,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           delay: 1,
                           child: TextButton(
                               onPressed: () {
-                                setState(() {});
                                 // print(emailtxt!.text);
                                 // print(passwordtxt!.text);
                                 emailAuth
@@ -384,11 +373,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   delay: 1,
                   child: GestureDetector(
                     onTap: (() {
-                      Navigator.pop(context);
-                      Navigator.of(context)
+                      Get.back();
+                      /*Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
                         return ForgotPasswordScreen();
-                      }));
+                      }));*/
+                      Get.to(() => ForgotPasswordScreen());
                     }),
                     child: Text("No puedes Ingresar?",
                         style: TextStyle(
@@ -413,11 +403,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           )),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return SignupScreen();
-                          }));
+                          Get.back();
+                          Get.to(() => SignupScreen());
                         },
                         child: Text("Registrate",
                             style: TextStyle(
