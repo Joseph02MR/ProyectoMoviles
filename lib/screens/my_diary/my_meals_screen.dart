@@ -1,6 +1,4 @@
 import 'package:final_moviles/screens/my_diary/meals_list_view.dart';
-import 'package:final_moviles/screens/my_diary/water_view.dart';
-import 'package:final_moviles/widgets/ui_view/body_measurement.dart';
 import 'package:final_moviles/widgets/ui_view/glass_view.dart';
 import 'package:final_moviles/widgets/ui_view/mediterranean_diet_view.dart';
 import 'package:final_moviles/widgets/ui_view/title_view.dart';
@@ -28,7 +26,7 @@ class _MyMealsScreenState extends State<MyMealsScreen>
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController!,
-            curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
+            curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
     addAllListData();
 
     scrollController.addListener(() {

@@ -4,6 +4,7 @@ import 'package:final_moviles/controllers/login_screen_controller.dart';
 import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/firebase/facebook_autjentication.dart';
 import 'package:final_moviles/firebase/google_authentication.dart';
+import 'package:final_moviles/models/user_model.dart';
 import 'package:final_moviles/screens/SignUP_Screen.dart';
 import 'package:final_moviles/screens/fitness_app_home_screen.dart';
 import 'package:final_moviles/screens/forgot_password_screen.dart';
@@ -11,6 +12,7 @@ import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import '../core/animations/Fade_Animation.dart';
 
@@ -38,6 +40,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
+  Future<bool> checkIfAlreadySignedInWithProvider(value) async {
+    List signedMethods =
+        await FirebaseAuth.instance.fetchSignInMethodsForEmail(value.email!);
+    if (signedMethods.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,39 +243,48 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: SocialLoginButton(
                               buttonType: SocialLoginButtonType.google,
                               onPressed: () async {
+                                UserModel? aux;
                                 await googleAuth
                                     .signInWithGoogle()
                                     .then((value) {
                                   if (value.name != null) {
-                                    final userId =
-                                        FirebaseAuth.instance.currentUser?.uid;
-                                    final userCollection = FirebaseFirestore
-                                        .instance
-                                        .collection('users');
-                                    final userDocument =
-                                        userCollection.doc(userId);
+                                    //arguments: value
+                                    aux = value;
+                                  }
+                                }).onError((error, stackTrace) {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.rightSlide,
+                                    title: 'Error de Credenciales',
+                                    desc: 'Verifica tus credenciales',
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () {},
+                                  ).show();
+                                });
+                                final userId =
+                                    FirebaseAuth.instance.currentUser?.uid;
 
+                                final userCollection = FirebaseFirestore
+                                    .instance
+                                    .collection('users');
+                                final userDocument = userCollection.doc(userId);
+
+                                if (aux != null) {
+                                  if (await checkIfAlreadySignedInWithProvider(
+                                      aux)) {
                                     userDocument.update({
-                                      'name': value.name,
-                                      'email': value.email,
-                                      'photo': value.photoUrl
+                                      'name': aux!.name,
+                                      'email': aux!.email,
+                                      'photo': aux!.photoUrl,
+                                      'waterdaily': 0
                                       // Add any other user information here
                                     });
-                                    Get.back();
-                                    Get.to(() => FitnessAppHomeScreen());
-                                    //arguments: value
-                                  } else {
-                                    AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.error,
-                                      animType: AnimType.rightSlide,
-                                      title: 'Error de Credenciales',
-                                      desc: 'Verifica tus credenciales',
-                                      btnCancelOnPress: () {},
-                                      btnOkOnPress: () {},
-                                    ).show();
                                   }
-                                });
+
+                                  Get.back();
+                                  Get.to(() => FitnessAppHomeScreen());
+                                }
                               },
                               backgroundColor: const Color(0xFF2697FF),
                               borderRadius: 12),

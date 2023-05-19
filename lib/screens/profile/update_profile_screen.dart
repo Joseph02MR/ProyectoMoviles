@@ -26,13 +26,11 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-
   TextEditingController nameController = TextEditingController();
-  TextEditingController wightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  
-  
+
   var logger = Logger(
     printer: PrettyPrinter(),
   );
@@ -77,23 +75,39 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     //userCollection.doc(usermail).update({
     widget.controller.localPhoto.value.path != '/'
         ? userCollection.doc(widget.controller.id).update({
-            'name': nameController.text,
             'photo': imageUrl,
+            'name': nameController.text != ""
+                ? nameController.text
+                : widget.controller.name,
             'watergoal': selectedProfile['water_goal'],
             'sleepgoal': selectedProfile['sleep_goal'],
             'calgoal': selectedProfile['carbs_goal'],
-            'age': ageController.text,
-            'weight': wightController.text,
-            'height': heightController.text
+            'age': ageController.text != ""
+                ? ageController.text
+                : widget.controller.age,
+            'weight': weightController.text != ""
+                ? weightController.text
+                : widget.controller.weight,
+            'height': heightController.text != ""
+                ? heightController.text
+                : widget.controller.height
           })
         : userCollection.doc(widget.controller.id).update({
-            'name': nameController.text,
+            'name': nameController.text != ""
+                ? nameController.text
+                : widget.controller.name,
             'watergoal': selectedProfile['water_goal'],
             'sleepgoal': selectedProfile['sleep_goal'],
             'calgoal': selectedProfile['carbs_goal'],
-            'age': ageController.text,
-            'weight': wightController.text,
-            'height': heightController.text
+            'age': ageController.text != ""
+                ? ageController.text
+                : widget.controller.age,
+            'weight': weightController.text != ""
+                ? weightController.text
+                : widget.controller.weight,
+            'height': heightController.text != ""
+                ? heightController.text
+                : widget.controller.height
           });
   }
 
@@ -345,7 +359,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: TextFormField(
-                              controller: wightController,
+                              controller: weightController,
                               decoration: const InputDecoration(
                                   label: Text(tWeight),
                                   prefixIcon:
