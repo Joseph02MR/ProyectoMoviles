@@ -285,6 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 for (final QueryDocumentSnapshot<
                                     Map<String, dynamic>> user in users.docs) {
                                   data = user.data();
+                                  logger.i(data.toString());
                                 }
 
                                 // bool condition =
@@ -292,7 +293,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //         aux);
                                 if (aux != null) {
                                   logger.i("$aux  ${aux?.email}");
-                                  if (data["email"] != '') {
+                                  if (data["email"] == FirebaseAuth.instance.currentUser?.email) {
                                     
                                   }else{
                                     logger.i('registered in firestore');
