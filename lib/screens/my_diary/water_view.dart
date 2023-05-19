@@ -56,7 +56,10 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
   }
 
   void myAlert() {
-    aux = dataController.wardaily.value.toInt()!;
+    dataController.wardaily.value != '' 
+    ? aux = dataController.wardaily.value.toInt()!
+    : aux = watervalue;
+    
     showDialog(
         context: context,
         builder: (BuildContext context) {

@@ -239,7 +239,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .collection('users');
                                     final userDocument =
                                         userCollection.doc(userId);
-                                    userDocument.set({
+
+                                    userDocument.update({
                                       'name': value.name,
                                       'email': value.email,
                                       'photo': value.photoUrl
@@ -281,10 +282,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .collection('users');
                                     final userDocument =
                                         userCollection.doc(userId);
-                                    userDocument.set({
+                                    userDocument.update({
                                       'name': value.name,
                                       'email': value.email,
-                                      'photo': value.photoUrl
+                                      'photo': value.photoUrl,
+                                      // 'waterdaily': ''
                                       // Add any other user information here
                                     });
                                     Get.back();
