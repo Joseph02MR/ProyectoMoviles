@@ -1,7 +1,14 @@
+import 'dart:math';
+
+import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
+import 'package:final_moviles/models/diary_data.dart';
+import 'package:final_moviles/models/profile_activities.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:get/get.dart';
 
 class MediterranesnDietView extends StatelessWidget {
   final AnimationController? animationController;
@@ -11,8 +18,17 @@ class MediterranesnDietView extends StatelessWidget {
       {Key? key, this.animationController, this.animation})
       : super(key: key);
 
+  Map<String, dynamic> aux() {
+    for (var element in profiles) {
+      if (element['name'] == DiaryData.actProfile) return element;
+    }
+    return Map.from({});
+  }
+
   @override
   Widget build(BuildContext context) {
+    MealsMasterController masterController = MealsMasterController();
+    var profile = aux();
     return AnimatedBuilder(
       animation: animationController!,
       builder: (BuildContext context, Widget? child) {
@@ -101,22 +117,25 @@ class MediterranesnDietView extends StatelessWidget {
                                                   child: Image.asset(
                                                       "assets/fitness_app/eaten.png"),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4, bottom: 3),
-                                                  child: Text(
-                                                    '${(1127 * animation!.value).toInt()}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 16,
-                                                      color: FitnessAppTheme
-                                                          .darkerText,
+                                                Obx(
+                                                  () => Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 4, bottom: 3),
+                                                    child: Text(
+                                                      '${(masterController.objDayKcal.value * animation!.value).toInt()}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontFamily:
+                                                            FitnessAppTheme
+                                                                .fontName,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16,
+                                                        color: FitnessAppTheme
+                                                            .darkerText,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -151,102 +170,6 @@ class MediterranesnDietView extends StatelessWidget {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        height: 48,
-                                        width: 2,
-                                        decoration: BoxDecoration(
-                                          color: HexColor('#F56E98')
-                                              .withOpacity(0.5),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 4, bottom: 2),
-                                              child: Text(
-                                                'Burned',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      FitnessAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.1,
-                                                  color: FitnessAppTheme.grey
-                                                      .withOpacity(0.5),
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  width: 28,
-                                                  height: 28,
-                                                  child: Image.asset(
-                                                      "assets/fitness_app/burned.png"),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4, bottom: 3),
-                                                  child: Text(
-                                                    '${(102 * animation!.value).toInt()}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 16,
-                                                      color: FitnessAppTheme
-                                                          .darkerText,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8, bottom: 3),
-                                                  child: Text(
-                                                    'Kcal',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 12,
-                                                      letterSpacing: -0.2,
-                                                      color: FitnessAppTheme
-                                                          .grey
-                                                          .withOpacity(0.5),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )
                                 ],
                               ),
                             ),
@@ -260,75 +183,85 @@ class MediterranesnDietView extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        color: FitnessAppTheme.white,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(100.0),
-                                        ),
-                                        border: Border.all(
-                                            width: 4,
-                                            color: FitnessAppTheme
-                                                .nearlyDarkBlue
-                                                .withOpacity(0.2)),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            '',
-                                            //'${actProfileData['carbs_goal'] - mealsCon.mealCarbs.toInt().abs()} ${mealsCon.mealCarbs > actProfileData['carbs_goal'] ? 'g extra' : 'g left'}',
-                                            //'${(1503 * animation!.value).toInt()}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 24,
-                                              letterSpacing: 0.0,
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          color: FitnessAppTheme.white,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(100.0),
+                                          ),
+                                          border: Border.all(
+                                              width: 4,
                                               color: FitnessAppTheme
-                                                  .nearlyDarkBlue,
-                                            ),
+                                                  .nearlyDarkBlue
+                                                  .withOpacity(0.2)),
+                                        ),
+                                        child: Obx(
+                                          () => Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                '${profile['kcal_goal'] - masterController.objDayKcal.value.toInt().abs()}',
+                                                //'${(1503 * animation!.value).toInt()}',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontFamily:
+                                                      FitnessAppTheme.fontName,
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 24,
+                                                  letterSpacing: 0.0,
+                                                  color: FitnessAppTheme
+                                                      .nearlyDarkBlue,
+                                                ),
+                                              ),
+                                              Text(
+                                                masterController
+                                                            .objDayKcal.value >
+                                                        profile['kcal_goal']
+                                                    ? 'kcal extra'
+                                                    : 'kcal left',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      FitnessAppTheme.fontName,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  letterSpacing: 0.0,
+                                                  color: FitnessAppTheme.grey
+                                                      .withOpacity(0.5),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            'Kcal left',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                              letterSpacing: 0.0,
-                                              color: FitnessAppTheme.grey
-                                                  .withOpacity(0.5),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                        )),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CustomPaint(
-                                      painter: CurvePainter(
-                                          colors: [
-                                            FitnessAppTheme.nearlyDarkBlue,
-                                            HexColor("#8A98E8"),
-                                            HexColor("#8A98E8")
-                                          ],
-                                          angle: 140 +
-                                              (360 - 140) *
-                                                  (1.0 - animation!.value)),
-                                      child: const SizedBox(
-                                        width: 108,
-                                        height: 108,
-                                      ),
-                                    ),
-                                  )
+                                  Obx(() => Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: CustomPaint(
+                                          painter: CurvePainter(
+                                              colors: [
+                                                FitnessAppTheme.nearlyDarkBlue,
+                                                HexColor("#8A98E8"),
+                                                HexColor("#8A98E8")
+                                              ],
+                                              angle: (MealsMasterController
+                                                              .dayKcal.value *
+                                                          100 /
+                                                          profile[
+                                                              'kcal_goal']) *
+                                                      360 /
+                                                      100 +
+                                                  (360 - 140) *
+                                                      (1.0 - animation!.value)),
+                                          child: const SizedBox(
+                                            width: 108,
+                                            height: 108,
+                                          ),
+                                        ),
+                                      ))
                                 ],
                               ),
                             ),
@@ -381,21 +314,29 @@ class MediterranesnDietView extends StatelessWidget {
                                     ),
                                     child: Row(
                                       children: <Widget>[
-                                        Container(
-                                          width:
-                                              ((70 / 1.2) * animation!.value),
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              HexColor('#87A0E5'),
-                                              HexColor('#87A0E5')
-                                                  .withOpacity(0.5),
-                                            ]),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(4.0)),
-                                          ),
-                                        )
+                                        Obx(() => Container(
+                                              width: min(
+                                                  70,
+                                                  (70 *
+                                                      (masterController
+                                                              .objDayCarbs
+                                                              .value /
+                                                          profile[
+                                                              'carbs_goal']) *
+                                                      animation!.value)),
+                                              height: 4,
+                                              decoration: BoxDecoration(
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  HexColor('#87A0E5'),
+                                                  HexColor('#87A0E5')
+                                                      .withOpacity(0.5),
+                                                ]),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(4.0)),
+                                              ),
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -403,7 +344,7 @@ class MediterranesnDietView extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
-                                    '12g left',
+                                    '${max(0, 1 * profile["carbs_goal"] - masterController.objDayCarbs.value).toInt()} g left',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -450,22 +391,31 @@ class MediterranesnDietView extends StatelessWidget {
                                         ),
                                         child: Row(
                                           children: <Widget>[
-                                            Container(
-                                              width: ((70 / 2) *
-                                                  animationController!.value),
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  HexColor('#F56E98')
-                                                      .withOpacity(0.1),
-                                                  HexColor('#F56E98'),
-                                                ]),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(4.0)),
+                                            Obx(
+                                              () => Container(
+                                                width: min(
+                                                    70,
+                                                    (70 *
+                                                        (masterController
+                                                                .objDayProts
+                                                                .value /
+                                                            profile[
+                                                                'prot_goal']) *
+                                                        animation!.value)),
+                                                height: 4,
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      LinearGradient(colors: [
+                                                    HexColor('#F56E98')
+                                                        .withOpacity(0.1),
+                                                    HexColor('#F56E98'),
+                                                  ]),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(4.0)),
+                                                ),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -473,7 +423,7 @@ class MediterranesnDietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '30g left',
+                                        '${max(0, 1 * profile["prot_goal"] - masterController.objDayProts.value).toInt()} g left',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -522,22 +472,31 @@ class MediterranesnDietView extends StatelessWidget {
                                         ),
                                         child: Row(
                                           children: <Widget>[
-                                            Container(
-                                              width: ((70 / 2.5) *
-                                                  animationController!.value),
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  HexColor('#F1B440')
-                                                      .withOpacity(0.1),
-                                                  HexColor('#F1B440'),
-                                                ]),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(4.0)),
+                                            Obx(
+                                              () => Container(
+                                                width: min(
+                                                    70,
+                                                    (70 *
+                                                        (masterController
+                                                                .objDayFats
+                                                                .value /
+                                                            profile[
+                                                                'fat_goal']) *
+                                                        animation!.value)),
+                                                height: 4,
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      LinearGradient(colors: [
+                                                    HexColor('#F1B440')
+                                                        .withOpacity(0.1),
+                                                    HexColor('#F1B440'),
+                                                  ]),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(4.0)),
+                                                ),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -545,7 +504,7 @@ class MediterranesnDietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '10g left',
+                                        '${max(0, 1 * profile["fat_goal"] - masterController.objDayFats.value).toInt()} g left',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,

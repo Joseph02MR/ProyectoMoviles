@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
 import 'package:final_moviles/models/profile_activities.dart';
@@ -241,7 +243,12 @@ class DietDetailsView extends StatelessWidget {
                                             HexColor("#8A98E8"),
                                             HexColor("#8A98E8")
                                           ],
-                                          angle: 140 +
+                                          angle: (mealsCon.mealKcal *
+                                                      100 /
+                                                      actProfileData[
+                                                          'kcal_goal']) *
+                                                  360 /
+                                                  100 +
                                               (360 - 140) *
                                                   (1.0 - animation!.value)),
                                       child: const SizedBox(
@@ -303,10 +310,13 @@ class DietDetailsView extends StatelessWidget {
                                     child: Row(
                                       children: <Widget>[
                                         Obx(() => Container(
-                                              width: ((mealsCon.mealCarbs /
-                                                      actProfileData[
-                                                          'carbs_goal']) *
-                                                  animation!.value),
+                                              width: min(
+                                                  70,
+                                                  (70 *
+                                                      (mealsCon.mealCarbs /
+                                                          actProfileData[
+                                                              'carbs_goal']) *
+                                                      animation!.value)),
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
@@ -377,10 +387,14 @@ class DietDetailsView extends StatelessWidget {
                                           children: <Widget>[
                                             Obx(
                                               () => Container(
-                                                width: ((mealsCon.mealProts /
-                                                        actProfileData[
-                                                            'prot_goal']) *
-                                                    animationController!.value),
+                                                width: min(
+                                                    70,
+                                                    (70 *
+                                                        (mealsCon.mealProts /
+                                                            actProfileData[
+                                                                'prot_goal']) *
+                                                        animationController!
+                                                            .value)),
                                                 height: 4,
                                                 decoration: BoxDecoration(
                                                   gradient:
@@ -455,10 +469,14 @@ class DietDetailsView extends StatelessWidget {
                                           children: <Widget>[
                                             Obx(
                                               () => Container(
-                                                width: ((mealsCon.mealFats /
-                                                        actProfileData[
-                                                            'fat_goal']) *
-                                                    animationController!.value),
+                                                width: min(
+                                                    70,
+                                                    (70 *
+                                                        (mealsCon.mealFats /
+                                                            actProfileData[
+                                                                'fat_goal']) *
+                                                        animationController!
+                                                            .value)),
                                                 height: 4,
                                                 decoration: BoxDecoration(
                                                   gradient:

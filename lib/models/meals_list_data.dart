@@ -21,24 +21,24 @@ class MealsListData {
         titleTxt: 'Breakfast',
         startColor: '#FA7D82',
         endColor: '#FFB295',
-        mealDataController: MealsScreenController()),
+        mealDataController: MealsScreenController(mealName: 'Breakfast')),
     MealsListData(
         imagePath: 'assets/fitness_app/lunch.png',
         titleTxt: 'Lunch',
         startColor: '#738AE6',
         endColor: '#5C5EDD',
-        mealDataController: MealsScreenController()),
+        mealDataController: MealsScreenController(mealName: 'Lunch')),
     MealsListData(
         imagePath: 'assets/fitness_app/snack.png',
         titleTxt: 'Snack',
         startColor: '#FE95B6',
         endColor: '#FF5287',
-        mealDataController: MealsScreenController()),
+        mealDataController: MealsScreenController(mealName: 'Snack')),
     MealsListData(
         imagePath: 'assets/fitness_app/dinner.png',
         titleTxt: 'Dinner',
         startColor: '#6F72CA',
         endColor: '#1E1466',
-        mealDataController: MealsScreenController()),
+        mealDataController: MealsScreenController(mealName: 'Dinner')),
   ];
 }

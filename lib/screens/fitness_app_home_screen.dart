@@ -1,4 +1,7 @@
+import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
+import 'package:final_moviles/controllers/profile_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
+import 'package:final_moviles/models/diary_data.dart';
 import 'package:final_moviles/models/tabIcon_data.dart';
 import 'package:final_moviles/screens/my_diary/my_meals_screen.dart';
 import 'package:final_moviles/screens/profile/profile_screen.dart';
@@ -19,6 +22,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
   AnimationController? animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  MealsMasterController masterController = MealsMasterController();
 
   Widget tabBody = Container(
     color: FitnessAppTheme.background,
@@ -37,7 +41,10 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyDiaryScreen(animationController: animationController);
+    tabBody = MyDiaryScreen(
+      animationController: animationController,
+      masterController: masterController,
+    );
     enableNotifs();
     super.initState();
   }
@@ -74,6 +81,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    DiaryData.setDiaryData(masterController);
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -118,8 +126,10 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      MyDiaryScreen(animationController: animationController);
+                  tabBody = MyDiaryScreen(
+                    animationController: animationController,
+                    masterController: masterController,
+                  );
                 });
               });
             } else if (index == 1) {
@@ -138,8 +148,10 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      MyMealsScreen(animationController: animationController);
+                  tabBody = MyMealsScreen(
+                    animationController: animationController,
+                    masterCon: masterController,
+                  );
                 });
               });
             } else if (index == 3) {
@@ -148,8 +160,9 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      ProfileScreen(animationController: animationController);
+                  tabBody = ProfileScreen(
+                    animationController: animationController,
+                  );
                 });
               });
             }

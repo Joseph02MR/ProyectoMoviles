@@ -1,22 +1,27 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
 import 'package:final_moviles/controllers/profile_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
+import 'package:final_moviles/models/diary_data.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:final_moviles/widgets/ui_view/wave_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:supercharged/supercharged.dart';
 
 class WaterView extends StatefulWidget {
   const WaterView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
+      {Key? key,
+      this.mainScreenAnimationController,
+      this.mainScreenAnimation,
+      required this.masterController})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
+  final MealsMasterController masterController;
 
   @override
   _WaterViewState createState() => _WaterViewState();
@@ -53,6 +58,10 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
     });
 
     dataController.setWaterValue(dataController.wardaily.value != ''
+        ? aux.toString()
+        : watervalue.toString());
+
+    MealsMasterController.setNewWaterValue(dataController.wardaily.value != ''
         ? aux.toString()
         : watervalue.toString());
   }
@@ -309,8 +318,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
         dataController.wgoal.value = data['watergoal'].toString();
         dataController.id = user.id;
         dataController.wardaily.value = data['waterdaily'].toString();
-        print(dataController.wgoal.value);
-        print(dataController.wardaily.value);
+        DiaryData.setWaterData(dataController.wardaily.value);
       }
     }
 

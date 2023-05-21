@@ -8,4 +8,8 @@ class UserData {
     activityProfile = act ?? activityProfile;
     uid = id ?? uid;
   }
+
+  static void setActivity(act) {
+    activityProfile = act;
+  }
 }

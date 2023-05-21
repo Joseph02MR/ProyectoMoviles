@@ -31,4 +31,16 @@ class Food {
   void setPortion(value) {
     portion = value;
   }
+
+  Map<String, dynamic> toMap() {
+    return Map.from({
+      "food_id": foodId,
+      "label": label,
+      "kcal": enercKcal,
+      "carbs": chocdf,
+      "prots": procnt,
+      "fats": fat,
+      "portion": portion
+    });
+  }
 }

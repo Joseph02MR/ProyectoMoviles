@@ -92,8 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () {},
           icon: const Icon(LineAwesomeIcons.angle_left),
         ),
-        title:
-            Text(tProfile, style: Theme.of(context).textTheme.headlineSmall),
+        title: Text(tProfile, style: Theme.of(context).textTheme.headlineSmall),
         actions: [
           IconButton(
               onPressed: () {
@@ -135,19 +134,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               // ignore: unrelated_type_equality_checks
               Obx(() => FadeAnimation(
-                delay: 0.8,
-                child: Text(
+                    delay: 0.8,
+                    child: Text(
                       dataController.name.value,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-              )),
+                  )),
               Obx(() => FadeAnimation(
-                delay: 0.8,
-                child: Text(
+                    delay: 0.8,
+                    child: Text(
                       dataController.email.value,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-              )),
+                  )),
 
               const SizedBox(height: 20),
               FadeAnimation(

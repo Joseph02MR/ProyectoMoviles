@@ -30,7 +30,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyDiaryScreen(animationController: animationController);
+    //tabBody = MyDiaryScreen(animationController: animationController);
     super.initState();
   }
 
@@ -86,8 +86,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      MyDiaryScreen(animationController: animationController);
+                  //tabBody = MyDiaryScreen(animationController: animationController, masterController: master,);
                 });
               });
             } else if (index == 1 || index == 3) {

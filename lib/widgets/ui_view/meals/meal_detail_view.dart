@@ -124,6 +124,7 @@ class MealsDetailView extends StatelessWidget {
       NutrientCardData('Protein', '#F56E98', aux.procnt, 'g'),
       NutrientCardData('Fat', '#F1B440', aux.fat, 'g'),
       NutrientCardData('Energy', '#A1E3A0', aux.enercKcal, 'kcal'),
+      NutrientCardData('Portions', '#A1E3A0', aux.portion.toDouble(), ''),
       //{"color":'#87A0E5',"name":},{"color":'#F56E98'},{},{}
     });
     return showDialog(
@@ -133,7 +134,7 @@ class MealsDetailView extends StatelessWidget {
             title: const Text('Detalles'),
             content: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 150,
+                height: 200,
                 child: GridView.builder(
                   itemCount: nutriotionalData.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -281,9 +282,11 @@ class MealsDetailView extends StatelessWidget {
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             return InkWell(
-                                              onTap: () =>
-                                                  _displayFoodDetailsDialog(
-                                                      context, index),
+                                              onTap: () {
+                                                _displayFoodDetailsDialog(
+                                                    context, index);
+                                                mealsCon!.update();
+                                              },
                                               child: FoodTile(
                                                 food: _.foodList[index],
                                               ),

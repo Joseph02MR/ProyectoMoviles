@@ -1,23 +1,18 @@
-import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/screens/my_diary/meal_update.screen.dart';
 import 'package:final_moviles/widgets/ui_view/meals/meal_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../fitness_app_theme.dart';
 import '../../models/meals_list_data.dart';
-import '../../utils/hexcolor.dart';
 
 class MealsListView extends StatefulWidget {
   const MealsListView({
     Key? key,
     this.mainScreenAnimationController,
     this.mainScreenAnimation,
-    this.mealsCon,
   }) : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
-  final MealsScreenController? mealsCon;
 
   @override
   _MealsListViewState createState() => _MealsListViewState();
