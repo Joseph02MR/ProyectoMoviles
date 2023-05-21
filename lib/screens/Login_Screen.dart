@@ -9,6 +9,7 @@ import 'package:final_moviles/screens/SignUP_Screen.dart';
 import 'package:final_moviles/screens/fitness_app_home_screen.dart';
 import 'package:final_moviles/screens/forgot_password_screen.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
+import 'package:final_moviles/utils/userdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -293,9 +294,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //         aux);
                                 if (aux != null) {
                                   logger.i("$aux  ${aux?.email}");
-                                  if (data["email"] == FirebaseAuth.instance.currentUser?.email) {
-                                    
-                                  }else{
+                                  if (data["email"] ==
+                                      FirebaseAuth
+                                          .instance.currentUser?.email) {
+                                  } else {
                                     logger.i('registered in firestore');
                                     userDocument.set({
                                       'name': aux!.name,
@@ -305,6 +307,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       // Add any other user information here
                                     });
                                   }
+
+                                  UserData.setData(
+                                      data['act_profile'] ?? 'baja', userId);
 
                                   Get.back();
                                   Get.to(() => FitnessAppHomeScreen());

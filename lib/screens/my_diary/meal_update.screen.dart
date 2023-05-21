@@ -1,3 +1,4 @@
+import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/models/meals_list_data.dart';
 import 'package:final_moviles/widgets/ui_view/meals/diet_details_view.dart';
 import 'package:final_moviles/widgets/ui_view/meals/meal_detail_view.dart';
@@ -9,10 +10,12 @@ class MealUpdateScreen extends StatelessWidget {
       {super.key,
       this.mealsListData,
       this.animationController,
-      this.animation});
+      this.animation,
+      this.mealsCon});
   final MealsListData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final MealsScreenController? mealsCon;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,7 @@ class MealUpdateScreen extends StatelessWidget {
           mealsListData: mealsListData,
           animationController: animationController,
           animation: animation,
+          mealsCon: mealsCon,
         ),
       ],
     );

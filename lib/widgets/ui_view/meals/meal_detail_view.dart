@@ -1,17 +1,202 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:final_moviles/controllers/meals/add_meal_controller.dart';
+import 'package:final_moviles/controllers/meals/food_list_controller.dart';
+import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
+import 'package:final_moviles/models/food.dart';
 import 'package:final_moviles/models/meals_list_data.dart';
+import 'package:final_moviles/models/nutrient_card_data.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:final_moviles/widgets/ui_view/meals/diet_details_view.dart';
+import 'package:final_moviles/widgets/ui_view/meals/food_tile.dart';
+import 'package:final_moviles/widgets/ui_view/meals/nutrient_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 class MealsDetailView extends StatelessWidget {
-  const MealsDetailView(
-      {Key? key, this.mealsListData, this.animationController, this.animation})
+  MealsDetailView(
+      {Key? key,
+      this.mealsListData,
+      this.animationController,
+      this.animation,
+      this.mealsCon})
       : super(key: key);
 
   final MealsListData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final MealsScreenController? mealsCon;
+
+  final AddMealController addmealCon = AddMealController();
+
+  final TextEditingController _tfFoodController = TextEditingController();
+  final TextEditingController _ttPortionController = TextEditingController();
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Ingresa el alimento a registrar'),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 100,
+              child: Column(
+                children: [
+                  TextField(
+                    onChanged: (value) {
+                      addmealCon.setInsertedText(value);
+                    },
+                    controller: _tfFoodController,
+                    decoration: const InputDecoration(
+                        hintText: "Agrega un alimento..."),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      addmealCon.setFoodPortion(value);
+                    },
+                    controller: _ttPortionController,
+                    decoration:
+                        const InputDecoration(hintText: "No. porciones"),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  addmealCon.setInsertedText("");
+                  addmealCon.setFoodPortion("0");
+                  Get.back();
+                },
+              ),
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('OK'),
+                onPressed: () async {
+                  addmealCon.getFoodData().then((value) {
+                    addmealCon.foodObj!.setPortion(addmealCon.portion.value);
+                    mealsCon!.setInsertedFood(addmealCon.foodObj);
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.success,
+                      animType: AnimType.rightSlide,
+                      title: 'Ingresar comida',
+                      desc: 'Nuevo alimento registrado',
+                      btnOkOnPress: () {
+                        Get.back();
+                      },
+                    ).show();
+                  }).onError((error, stackTrace) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      title: 'Ingresar comida',
+                      desc: 'No pudimos agregar el alimento ingresado. :(',
+                      btnOkOnPress: () {
+                        Get.back();
+                      },
+                    ).show();
+                    logger.w(error);
+                    logger.i(stackTrace);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _displayFoodDetailsDialog(BuildContext context, index) async {
+    Food aux = mealsCon!.insertedFoodList[index];
+    List<NutrientCardData> nutriotionalData = List.from({
+      NutrientCardData('Carbs', '#87A0E5', aux.chocdf, 'g'),
+      NutrientCardData('Protein', '#F56E98', aux.procnt, 'g'),
+      NutrientCardData('Fat', '#F1B440', aux.fat, 'g'),
+      NutrientCardData('Energy', '#A1E3A0', aux.enercKcal, 'kcal'),
+      //{"color":'#87A0E5',"name":},{"color":'#F56E98'},{},{}
+    });
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Detalles'),
+            content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 150,
+                child: GridView.builder(
+                  itemCount: nutriotionalData.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 2,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0),
+                  itemBuilder: (BuildContext context, int index) {
+                    return NutrientCard(
+                      color: nutriotionalData[index].color,
+                      animation: animation!,
+                      measure: nutriotionalData[index].measure,
+                      name: nutriotionalData[index].name,
+                      quantity: nutriotionalData[index].quantity,
+                    );
+                  },
+                )),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('Eliminar'),
+                onPressed: () {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.warning,
+                    animType: AnimType.rightSlide,
+                    title: 'Eliminar alimento',
+                    desc: '¿Desea eliminar este registro?',
+                    btnOkOnPress: () {
+                      mealsCon!.insertedFoodList.removeAt(index);
+                      Get.back();
+                    },
+                  ).show();
+                },
+              ),
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('OK'),
+                onPressed: () async {
+                  Get.back();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  void onDelete(context, index) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      title: 'Eliminar comida',
+      desc: 'Desea eliminar este alimento?',
+      btnCancelOnPress: () => Get.off(context),
+      btnOkOnPress: () {
+        mealsCon?.removeFoodFromList(index);
+        Get.off(context);
+      },
+    ).show();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +249,7 @@ class MealsDetailView extends StatelessWidget {
                             DietDetailsView(
                               animation: animation,
                               animationController: animationController,
+                              mealsCon: mealsCon!,
                             ),
                             Text(
                               mealsListData!.titleTxt,
@@ -84,30 +270,38 @@ class MealsDetailView extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(top: 4, bottom: 4),
                                 child: SizedBox(
-                                  height: 250,
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    children: <Widget>[
-                                      Text(
-                                        mealsListData!.meals!.join('\n'),
-                                        style: const TextStyle(
-                                          fontFamily: FitnessAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          letterSpacing: 0.2,
-                                          color: FitnessAppTheme.white,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 250,
+                                    child: Scaffold(
+                                      body: GetBuilder<FoodListController>(
+                                        init: FoodListController(
+                                            mealsCon!.insertedFoodList),
+                                        builder: (_) => ListView.builder(
+                                          itemCount: _.foodList.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return InkWell(
+                                              onTap: () =>
+                                                  _displayFoodDetailsDialog(
+                                                      context, index),
+                                              child: FoodTile(
+                                                food: _.foodList[index],
+                                              ),
+                                            );
+                                          },
+                                          shrinkWrap: true,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                    )),
                               ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _displayTextInputDialog(context);
+                                    },
                                     child: const Text("Agregar alimentos"))
                               ],
                             ),

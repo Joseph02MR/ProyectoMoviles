@@ -1,17 +1,34 @@
+import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
+import 'package:final_moviles/models/profile_activities.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
+import 'package:final_moviles/utils/userdata.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:get/get.dart';
 
 class DietDetailsView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final MealsScreenController mealsCon;
 
-  const DietDetailsView({Key? key, this.animationController, this.animation})
+  DietDetailsView(
+      {Key? key,
+      this.animationController,
+      this.animation,
+      required this.mealsCon})
       : super(key: key);
+
+  late Map<String, dynamic> actProfileData;
 
   @override
   Widget build(BuildContext context) {
+    for (var element in profiles) {
+      if (element['name'] == UserData.activityProfile) {
+        actProfileData = Map.from(element);
+      }
+    }
     return AnimatedBuilder(
       animation: animationController!,
       builder: (BuildContext context, Widget? child) {
@@ -105,7 +122,7 @@ class DietDetailsView extends StatelessWidget {
                                                       const EdgeInsets.only(
                                                           left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(1127 * animation!.value).toInt()}',
+                                                    '${mealsCon.mealKcal.toInt()}',
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                       fontFamily:
@@ -183,7 +200,7 @@ class DietDetailsView extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            '${(1503 * animation!.value).toInt()}',
+                                            '${actProfileData['kcal_goal'] - mealsCon.mealKcal.toInt().abs()}',
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                               fontFamily:
@@ -196,7 +213,10 @@ class DietDetailsView extends StatelessWidget {
                                             ),
                                           ),
                                           Text(
-                                            'Kcal left',
+                                            mealsCon.mealKcal >
+                                                    actProfileData['kcal_goal']
+                                                ? 'kcal extra'
+                                                : 'Kcal left',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
@@ -282,39 +302,43 @@ class DietDetailsView extends StatelessWidget {
                                     ),
                                     child: Row(
                                       children: <Widget>[
-                                        Container(
-                                          width:
-                                              ((70 / 1.2) * animation!.value),
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              HexColor('#87A0E5'),
-                                              HexColor('#87A0E5')
-                                                  .withOpacity(0.5),
-                                            ]),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(4.0)),
-                                          ),
-                                        )
+                                        Obx(() => Container(
+                                              width: ((mealsCon.mealCarbs /
+                                                      actProfileData[
+                                                          'carbs_goal']) *
+                                                  animation!.value),
+                                              height: 4,
+                                              decoration: BoxDecoration(
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  HexColor('#87A0E5'),
+                                                  HexColor('#87A0E5')
+                                                      .withOpacity(0.5),
+                                                ]),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(4.0)),
+                                              ),
+                                            ))
                                       ],
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 6),
-                                  child: Text(
-                                    '12g left',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                      color:
-                                          FitnessAppTheme.grey.withOpacity(0.5),
-                                    ),
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.only(top: 6),
+                                    child: Obx(
+                                      () => Text(
+                                        '${mealsCon.mealCarbs.toInt()}g total',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: FitnessAppTheme.fontName,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                          color: FitnessAppTheme.grey
+                                              .withOpacity(0.5),
+                                        ),
+                                      ),
+                                    )),
                               ],
                             ),
                           ),
@@ -351,40 +375,46 @@ class DietDetailsView extends StatelessWidget {
                                         ),
                                         child: Row(
                                           children: <Widget>[
-                                            Container(
-                                              width: ((70 / 2) *
-                                                  animationController!.value),
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  HexColor('#F56E98')
-                                                      .withOpacity(0.1),
-                                                  HexColor('#F56E98'),
-                                                ]),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(4.0)),
+                                            Obx(
+                                              () => Container(
+                                                width: ((mealsCon.mealProts /
+                                                        actProfileData[
+                                                            'prot_goal']) *
+                                                    animationController!.value),
+                                                height: 4,
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      LinearGradient(colors: [
+                                                    HexColor('#F56E98')
+                                                        .withOpacity(0.1),
+                                                    HexColor('#F56E98'),
+                                                  ]),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(4.0)),
+                                                ),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 6),
-                                      child: Text(
-                                        '30g left',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: FitnessAppTheme.fontName,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                          color: FitnessAppTheme.grey
-                                              .withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ),
+                                        padding: const EdgeInsets.only(top: 6),
+                                        child: Obx(
+                                          () => Text(
+                                            '${mealsCon.mealProts.toInt()}g total',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  FitnessAppTheme.fontName,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: FitnessAppTheme.grey
+                                                  .withOpacity(0.5),
+                                            ),
+                                          ),
+                                        )),
                                   ],
                                 ),
                               ],
@@ -423,40 +453,46 @@ class DietDetailsView extends StatelessWidget {
                                         ),
                                         child: Row(
                                           children: <Widget>[
-                                            Container(
-                                              width: ((70 / 2.5) *
-                                                  animationController!.value),
-                                              height: 4,
-                                              decoration: BoxDecoration(
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  HexColor('#F1B440')
-                                                      .withOpacity(0.1),
-                                                  HexColor('#F1B440'),
-                                                ]),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(4.0)),
+                                            Obx(
+                                              () => Container(
+                                                width: ((mealsCon.mealFats /
+                                                        actProfileData[
+                                                            'fat_goal']) *
+                                                    animationController!.value),
+                                                height: 4,
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      LinearGradient(colors: [
+                                                    HexColor('#F1B440')
+                                                        .withOpacity(0.1),
+                                                    HexColor('#F1B440'),
+                                                  ]),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(4.0)),
+                                                ),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 6),
-                                      child: Text(
-                                        '10g left',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: FitnessAppTheme.fontName,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                          color: FitnessAppTheme.grey
-                                              .withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ),
+                                        padding: const EdgeInsets.only(top: 6),
+                                        child: Obx(
+                                          () => Text(
+                                            '${mealsCon.mealFats.toInt()}g total',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  FitnessAppTheme.fontName,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: FitnessAppTheme.grey
+                                                  .withOpacity(0.5),
+                                            ),
+                                          ),
+                                        )),
                                   ],
                                 ),
                               ],

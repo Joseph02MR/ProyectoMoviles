@@ -1,16 +1,23 @@
+import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
 import 'package:final_moviles/models/meals_list_data.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 class MealsView extends StatelessWidget {
   const MealsView(
-      {Key? key, this.mealsListData, this.animationController, this.animation})
+      {Key? key,
+      this.mealsListData,
+      this.animationController,
+      this.animation,
+      required this.mealsCon})
       : super(key: key);
 
   final MealsListData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final MealsScreenController mealsCon;
 
   @override
   Widget build(BuildContext context) {
@@ -79,27 +86,34 @@ class MealsView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      mealsListData!.meals!.join('\n'),
-                                      style: const TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                        letterSpacing: 0.2,
-                                        color: FitnessAppTheme.white,
+                                    Obx(
+                                      () => Text(
+                                        mealsCon.insertedFoodList
+                                            .map((element) => element.label)
+                                            .toList()
+                                            .join("\n"),
+                                        style: const TextStyle(
+                                          fontFamily: FitnessAppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10,
+                                          letterSpacing: 0.2,
+                                          color: FitnessAppTheme.white,
+                                        ),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ),
                             ),
-                            mealsListData?.kacl != 0
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                            mealsListData?.mealDataController.mealKcal.value !=
+                                    0
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        mealsListData!.kacl.toString(),
+                                        '${mealsListData?.mealDataController.mealKcal.value.toInt()}',
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,

@@ -280,7 +280,9 @@ class MediterranesnDietView extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            '${(1503 * animation!.value).toInt()}',
+                                            '',
+                                            //'${actProfileData['carbs_goal'] - mealsCon.mealCarbs.toInt().abs()} ${mealsCon.mealCarbs > actProfileData['carbs_goal'] ? 'g extra' : 'g left'}',
+                                            //'${(1503 * animation!.value).toInt()}',
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
                                               fontFamily:

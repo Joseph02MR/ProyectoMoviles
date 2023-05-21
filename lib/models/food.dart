@@ -1,11 +1,12 @@
 class Food {
   final String foodId;
   final String label;
-  final int enercKcal;
+  final double enercKcal;
   final double procnt;
-  final int fat;
+  final double fat;
   final double chocdf;
-  final int fibtg;
+  final double fibtg;
+  int portion = 1;
 
   Food({
     required this.foodId,
@@ -26,4 +27,8 @@ class Food {
         chocdf: json["nutrients"]["CHOCDF"]?.toDouble(),
         fibtg: json["nutrients"]["FIBTG"],
       );
+
+  void setPortion(value) {
+    portion = value;
+  }
 }

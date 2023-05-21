@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/screens/my_diary/meals_list_view.dart';
 import 'package:final_moviles/widgets/ui_view/glass_view.dart';
 import 'package:final_moviles/widgets/ui_view/mediterranean_diet_view.dart';
 import 'package:final_moviles/widgets/ui_view/title_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +23,8 @@ class _MyMealsScreenState extends State<MyMealsScreen>
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
+
+  MealsScreenController mealsCon = MealsScreenController();
 
   @override
   void initState() {
@@ -97,6 +102,7 @@ class _MyMealsScreenState extends State<MyMealsScreen>
                 curve: const Interval((1 / count) * 3, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
+        mealsCon: mealsCon,
       ),
     );
 

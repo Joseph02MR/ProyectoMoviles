@@ -9,6 +9,7 @@ import 'package:final_moviles/models/profile_activities.dart';
 import 'package:final_moviles/utils/color_constants.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:final_moviles/utils/text_constants.dart';
+import 'package:final_moviles/utils/userdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -80,8 +81,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ? nameController.text
                 : widget.controller.name.value,
             'watergoal': selectedProfile['water_goal'],
-            'sleepgoal': selectedProfile['sleep_goal'],
-            'calgoal': selectedProfile['carbs_goal'],
+            'act_profile': selectedProfile['name'],
             'age': ageController.text != ""
                 ? ageController.text
                 : widget.controller.age.value,
@@ -97,8 +97,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ? nameController.text
                 : widget.controller.name.value,
             'watergoal': selectedProfile['water_goal'],
-            'sleepgoal': selectedProfile['sleep_goal'],
-            'calgoal': selectedProfile['carbs_goal'],
+            'act_profile': selectedProfile['name'],
             'age': ageController.text != ""
                 ? ageController.text
                 : widget.controller.age.value,
@@ -108,7 +107,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             'height': heightController.text != ""
                 ? heightController.text
                 : widget.controller.height.value
-          });
+          }).then((value) =>
+            UserData.setData(selectedProfile['name'], widget.controller.id));
   }
 
   void myAlert() {

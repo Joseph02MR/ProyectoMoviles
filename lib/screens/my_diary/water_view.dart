@@ -40,8 +40,6 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
     double percentage = dataController.wardaily.value != ''
         ? (((aux.toDouble()) / initialGoal!) * 100)
         : (((watervalue / initialGoal!) * 100));
-    print(aux);
-    print(percentage);
     return percentage;
   }
 
