@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_moviles/controllers/dropdownbutton_controller.dart';
 import 'package:final_moviles/controllers/profile_screen_controller.dart';
 import 'package:final_moviles/core/animations/Fade_Animation.dart';
+import 'package:final_moviles/models/diary_data.dart';
 import 'package:final_moviles/models/profile_activities.dart';
 import 'package:final_moviles/utils/color_constants.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
@@ -107,8 +108,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             'height': heightController.text != ""
                 ? heightController.text
                 : widget.controller.height.value
-          }).then((value) =>
-            UserData.setData(selectedProfile['name'], widget.controller.id));
+          }).then((value) {
+            UserData.setData(selectedProfile['name'], widget.controller.id);
+            DiaryData.userWeight = double.parse(weightController.text != ""
+                ? weightController.text
+                : widget.controller.weight.value);
+            DiaryData.userHeight = int.parse(heightController.text != ""
+                ? heightController.text
+                : widget.controller.height.value);
+          });
   }
 
   void myAlert() {

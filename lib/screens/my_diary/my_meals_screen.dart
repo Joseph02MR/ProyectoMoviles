@@ -229,7 +229,10 @@ class _MyMealsScreenState extends State<MyMealsScreen>
                                 highlightColor: Colors.transparent,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0)),
-                                onTap: () {},
+                                onTap: () {
+                                  DiaryData.date = DiaryData.date
+                                      .subtract(const Duration(days: 1));
+                                },
                                 child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_left,
@@ -274,7 +277,10 @@ class _MyMealsScreenState extends State<MyMealsScreen>
                                 highlightColor: Colors.transparent,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0)),
-                                onTap: () {},
+                                onTap: () {
+                                  DiaryData.date = DiaryData.date
+                                      .add(const Duration(days: 1));
+                                },
                                 child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_right,

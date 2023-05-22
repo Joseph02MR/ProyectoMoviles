@@ -84,6 +84,8 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
   @override
   Widget build(BuildContext context) {
     DiaryData.setDiaryData(masterController);
+    logger.i(MealsMasterController.mealsList.toString());
+    logger.i(MealsMasterController.dayKcal.toString());
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(

@@ -16,4 +16,8 @@ class UserData {
   static void setActivity(act) {
     activityProfile = act;
   }
+
+  static void setEmail(value) {
+    email = value;
+  }
 }

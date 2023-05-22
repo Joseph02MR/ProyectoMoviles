@@ -68,6 +68,7 @@ class MealsScreenController extends GetxController {
 
   void saveDataInDiary() {
     DiaryData.mealsData[mealName] = Map.from({
+      "name": mealName,
       "nutrient_data": nutrientDataToMap(),
       "food_list": List.from(insertedFoodList.map((element) => element.toMap()))
     });

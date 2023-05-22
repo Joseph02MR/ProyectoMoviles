@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:final_moviles/models/food.dart';
 import 'package:logger/logger.dart';
 
@@ -10,6 +8,12 @@ class FoodsApi {
     printer: PrettyPrinter(),
   );
 
+  FoodsApi() {
+    dio.interceptors.add(
+        DioCacheManager(CacheConfig(baseUrl: "https://api.edamam.com"))
+            .interceptor);
+  }
+
   final dio = Dio();
 
   Uri link = Uri.parse(
@@ -17,7 +21,8 @@ class FoodsApi {
   Future<Food?>? getFoodData(String food) async {
     String foodParsed = food.replaceAll(" ", "%20");
     try {
-      var result = await dio.get(link.toString() + foodParsed);
+      var result = await dio.get(link.toString() + foodParsed,
+          options: buildCacheOptions(const Duration(days: 7)));
       var listJson = result.data['parsed'][0]['food'];
       if (result.statusCode == 200) {
         return Food.fromJson(listJson);

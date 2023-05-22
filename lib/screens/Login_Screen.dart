@@ -310,6 +310,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                   UserData.setData(
                                       data['act_profile'] ?? 'baja', userId);
+                                  UserData.setEmail(data['email']);
 
                                   Get.back();
                                   Get.to(() => FitnessAppHomeScreen());

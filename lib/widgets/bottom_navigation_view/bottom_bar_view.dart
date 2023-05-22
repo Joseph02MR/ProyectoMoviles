@@ -46,7 +46,7 @@ class _BottomBarViewState extends State<BottomBarView>
                 color: FitnessAppTheme.white,
                 elevation: 16.0,
                 clipper: TabClipper(
-                    radius: Tween<double>(begin: 0.0, end: 1.0)
+                    radius: Tween<double>(begin: 0.0, end: 0.0)
                             .animate(CurvedAnimation(
                                 parent: animationController!,
                                 curve: Curves.fastOutSlowIn))
@@ -69,23 +69,6 @@ class _BottomBarViewState extends State<BottomBarView>
                                         widget.tabIconsList?[0]);
                                     widget.changeIndex!(0);
                                   }),
-                            ),
-                            Expanded(
-                              child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[1],
-                                  removeAllSelect: () {
-                                    setRemoveAllSelection(
-                                        widget.tabIconsList?[1]);
-                                    widget.changeIndex!(1);
-                                  }),
-                            ),
-                            SizedBox(
-                              width: Tween<double>(begin: 0.0, end: 1.0)
-                                      .animate(CurvedAnimation(
-                                          parent: animationController!,
-                                          curve: Curves.fastOutSlowIn))
-                                      .value *
-                                  64.0,
                             ),
                             Expanded(
                               child: TabIcons(
