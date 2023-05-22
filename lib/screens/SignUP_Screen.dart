@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:final_moviles/controllers/register_screen_controller.dart';
 import 'package:final_moviles/firebase/email_authentication.dart';
 import 'package:final_moviles/fitness_app_home_screen.dart';
 import 'package:final_moviles/screens/Login_Screen.dart';
@@ -6,6 +7,7 @@ import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:get/get.dart';
 import '../core/animations/Fade_Animation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -29,6 +31,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   FormData? selected;
   Emailuth emailauth = Emailuth();
+  RegisterController regcon = RegisterController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -108,14 +111,14 @@ class _SignupScreenState extends State<SignupScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          FadeAnimation(
+                          Obx(() => FadeAnimation(
                             delay: 1,
                             child: Container(
                               width: 300,
                               height: 40,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12.0),
-                                color: selected == FormData.Email
+                                color: regcon.selected.value == 'name'
                                     ? enabled
                                     : backgroundColor,
                               ),
@@ -123,48 +126,46 @@ class _SignupScreenState extends State<SignupScreen> {
                               child: TextField(
                                 controller: nameController,
                                 onTap: () {
-                                  setState(() {
-                                    selected = FormData.Name;
-                                  });
+                                  regcon.setSelected('name');
                                 },
                                 decoration: InputDecoration(
                                   enabledBorder: InputBorder.none,
                                   border: InputBorder.none,
                                   prefixIcon: Icon(
                                     Icons.title,
-                                    color: selected == FormData.Name
+                                    color: regcon.selected.value == 'name'
                                         ? enabledtxt
                                         : deaible,
                                     size: 20,
                                   ),
                                   hintText: 'Nombre Completo',
                                   hintStyle: TextStyle(
-                                      color: selected == FormData.Name
+                                      color: regcon.selected.value == 'name'
                                           ? enabledtxt
                                           : deaible,
                                       fontSize: 12),
                                 ),
                                 textAlignVertical: TextAlignVertical.center,
                                 style: TextStyle(
-                                    color: selected == FormData.Name
+                                    color: regcon.selected.value == 'name'
                                         ? enabledtxt
                                         : deaible,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
                               ),
                             ),
-                          ),
+                          )),
                           const SizedBox(
                             height: 20,
                           ),
-                          FadeAnimation(
+                          Obx(() => FadeAnimation(
                             delay: 1,
                             child: Container(
                               width: 300,
                               height: 40,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12.0),
-                                color: selected == FormData.Email
+                                color: regcon.selected.value == 'email'
                                     ? enabled
                                     : backgroundColor,
                               ),
@@ -172,64 +173,61 @@ class _SignupScreenState extends State<SignupScreen> {
                               child: TextField(
                                 controller: emailController,
                                 onTap: () {
-                                  setState(() {
-                                    selected = FormData.Email;
-                                  });
+                                  regcon.setSelected('email');
                                 },
                                 decoration: InputDecoration(
                                   enabledBorder: InputBorder.none,
                                   border: InputBorder.none,
                                   prefixIcon: Icon(
                                     Icons.email_outlined,
-                                    color: selected == FormData.Email
+                                    color: regcon.selected.value == 'email'
                                         ? enabledtxt
                                         : deaible,
                                     size: 20,
                                   ),
                                   hintText: 'Email',
                                   hintStyle: TextStyle(
-                                      color: selected == FormData.Email
+                                      color: regcon.selected.value == 'email'
                                           ? enabledtxt
                                           : deaible,
                                       fontSize: 12),
                                 ),
                                 textAlignVertical: TextAlignVertical.center,
                                 style: TextStyle(
-                                    color: selected == FormData.Email
+                                    color: regcon.selected.value == 'email'
                                         ? enabledtxt
                                         : deaible,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
                               ),
                             ),
-                          ),
+                          )),
                           const SizedBox(
                             height: 20,
                           ),
-                          FadeAnimation(
+                          Obx(() => FadeAnimation(
                             delay: 1,
                             child: Container(
                               width: 300,
                               height: 40,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12.0),
-                                  color: selected == FormData.password
+                                  color: regcon.selected.value == 'password'
                                       ? enabled
                                       : backgroundColor),
                               padding: const EdgeInsets.all(5.0),
                               child: TextField(
                                 controller: passwordController,
                                 onTap: () {
-                                  setState(() {
-                                    selected = FormData.password;
-                                  });
+                                 regcon.setSelected('password');
                                 },
                                 decoration: InputDecoration(
                                     enabledBorder: InputBorder.none,
                                     border: InputBorder.none,
                                     prefixIcon: Icon(
                                       Icons.lock_open_outlined,
-                                      color: selected == FormData.password
+                                      color: regcon.selected.value ==
+                                                'password'
                                           ? enabledtxt
                                           : deaible,
                                       size: 20,
@@ -239,7 +237,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ? Icon(
                                               Icons.visibility_off,
                                               color:
-                                                  selected == FormData.password
+                                                  regcon.selected.value ==
+                                                'password'
                                                       ? enabledtxt
                                                       : deaible,
                                               size: 20,
@@ -247,51 +246,51 @@ class _SignupScreenState extends State<SignupScreen> {
                                           : Icon(
                                               Icons.visibility,
                                               color:
-                                                  selected == FormData.password
+                                                  regcon.selected.value ==
+                                                'password'
                                                       ? enabledtxt
                                                       : deaible,
                                               size: 20,
                                             ),
-                                      onPressed: () => setState(
-                                          () => ispasswordev = !ispasswordev),
+                                      onPressed: () => regcon.setViewablePass()
                                     ),
                                     hintText: 'Password',
                                     hintStyle: TextStyle(
-                                        color: selected == FormData.password
+                                        color:  regcon.selected.value ==
+                                                'password'
                                             ? enabledtxt
                                             : deaible,
                                         fontSize: 12)),
                                 obscureText: ispasswordev,
                                 textAlignVertical: TextAlignVertical.center,
                                 style: TextStyle(
-                                    color: selected == FormData.password
+                                    color:  regcon.selected.value ==
+                                                'password'
                                         ? enabledtxt
                                         : deaible,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
                               ),
                             ),
-                          ),
+                          )),
                           const SizedBox(
                             height: 20,
                           ),
-                          FadeAnimation(
+                          Obx(() => FadeAnimation(
                             delay: 1,
                             child: Container(
                               width: 300,
                               height: 40,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12.0),
-                                  color: selected == FormData.ConfirmPassword
+                                  color: regcon.selected.value == 'confirmpassword'
                                       ? enabled
                                       : backgroundColor),
                               padding: const EdgeInsets.all(5.0),
                               child: TextField(
                                 controller: confirmPasswordController,
                                 onTap: () {
-                                  setState(() {
-                                    selected = FormData.ConfirmPassword;
-                                  });
+                                  regcon.setSelected('confirmpassword');
                                 },
                                 decoration: InputDecoration(
                                     enabledBorder: InputBorder.none,
@@ -299,7 +298,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     prefixIcon: Icon(
                                       Icons.lock_open_outlined,
                                       color:
-                                          selected == FormData.ConfirmPassword
+                                          regcon.selected.value == 'confirmpassword'
                                               ? enabledtxt
                                               : deaible,
                                       size: 20,
@@ -308,41 +307,38 @@ class _SignupScreenState extends State<SignupScreen> {
                                       icon: ispasswordev
                                           ? Icon(
                                               Icons.visibility_off,
-                                              color: selected ==
-                                                      FormData.ConfirmPassword
+                                              color: regcon.selected.value == 'confirmpassword'
                                                   ? enabledtxt
                                                   : deaible,
                                               size: 20,
                                             )
                                           : Icon(
                                               Icons.visibility,
-                                              color: selected ==
-                                                      FormData.ConfirmPassword
+                                              color: regcon.selected.value == 'confirmpassword'
                                                   ? enabledtxt
                                                   : deaible,
                                               size: 20,
                                             ),
-                                      onPressed: () => setState(
-                                          () => ispasswordev = !ispasswordev),
+                                      onPressed: () => regcon.setViewablePass(),
                                     ),
                                     hintText: 'Confirm Password',
                                     hintStyle: TextStyle(
                                         color:
-                                            selected == FormData.ConfirmPassword
+                                            regcon.selected.value == 'confirmpassword'
                                                 ? enabledtxt
                                                 : deaible,
                                         fontSize: 12)),
                                 obscureText: ispasswordev,
                                 textAlignVertical: TextAlignVertical.center,
                                 style: TextStyle(
-                                    color: selected == FormData.ConfirmPassword
+                                    color: regcon.selected.value == 'confirmpassword'
                                         ? enabledtxt
                                         : deaible,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12),
                               ),
                             ),
-                          ),
+                          )),
                           const SizedBox(
                             height: 25,
                           ),

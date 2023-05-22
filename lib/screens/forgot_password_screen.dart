@@ -136,9 +136,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             child: TextField(
                               controller: emailController,
                               onTap: () {
-                                setState(() {
-                                  selected = FormData.Email;
-                                });
+                                selected = FormData.Email;
                               },
                               decoration: InputDecoration(
                                 enabledBorder: InputBorder.none,
