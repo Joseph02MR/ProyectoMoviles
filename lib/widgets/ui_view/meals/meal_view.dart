@@ -1,9 +1,12 @@
+import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
 import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
+import 'package:final_moviles/models/food.dart';
 import 'package:final_moviles/models/meals_list_data.dart';
 import 'package:final_moviles/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:logger/logger.dart';
 
 class MealsView extends StatelessWidget {
   const MealsView(
@@ -86,12 +89,40 @@ class MealsView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Obx(
-                                      () => Text(
-                                        mealsCon.insertedFoodList
-                                            .map((element) => element.label)
-                                            .toList()
-                                            .join("\n"),
+                                    Obx(() {
+                                      var logger = Logger(
+                                        printer: PrettyPrinter(),
+                                      );
+                                      /* logger.w(MealsMasterController
+                                          .mealsList[mealsCon.mealName]
+                                              ['food_list']
+                                          .runtimeType
+                                          .toString());*/
+                                      return Text(
+                                        List<Food>.from(MealsMasterController
+                                                                .mealsList[
+                                                            mealsCon.mealName]
+                                                        ['food_list'])
+                                                    .length >
+                                                2
+                                            //true
+                                            ?
+                                            /*    .runtimeType
+                                            .toString(),*/
+                                            List<Food>.from(MealsMasterController
+                                                            .mealsList[
+                                                        mealsCon.mealName]
+                                                    ['food_list'])
+                                                .sublist(0, 1)
+                                                .map((element) => element.label)
+                                                .toList()
+                                                .join("\n")
+                                            : MealsMasterController
+                                                .mealsList[mealsCon.mealName]
+                                                    ['food_list']
+                                                .map((element) => element.label)
+                                                .toList()
+                                                .join("\n"),
                                         style: const TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
                                           fontWeight: FontWeight.w500,
@@ -99,69 +130,74 @@ class MealsView extends StatelessWidget {
                                           letterSpacing: 0.2,
                                           color: FitnessAppTheme.white,
                                         ),
-                                      ),
-                                    )
+                                      );
+                                    })
                                   ],
                                 ),
                               ),
                             ),
-                            mealsListData?.mealDataController.mealKcal.value !=
-                                    0
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        '${mealsListData?.mealDataController.mealKcal.value.toInt()}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontFamily: FitnessAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 24,
-                                          letterSpacing: 0.2,
-                                          color: FitnessAppTheme.white,
-                                        ),
-                                      ),
-                                      const Padding(
-                                        padding:
-                                            EdgeInsets.only(left: 4, bottom: 3),
-                                        child: Text(
-                                          'kcal',
-                                          style: TextStyle(
+                            Obx(
+                              () => MealsMasterController.mealsList[
+                                              mealsListData!.titleTxt]
+                                          ['nutrient_data']['kcal'] !=
+                                      0
+                                  ? Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          '${MealsMasterController.mealsList[mealsListData!.titleTxt]['nutrient_data']['kcal'].toInt()}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
                                             fontFamily:
                                                 FitnessAppTheme.fontName,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 10,
+                                            fontSize: 24,
                                             letterSpacing: 0.2,
                                             color: FitnessAppTheme.white,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: FitnessAppTheme.nearlyWhite,
-                                      shape: BoxShape.circle,
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: FitnessAppTheme.nearlyBlack
-                                                .withOpacity(0.4),
-                                            offset: const Offset(8.0, 8.0),
-                                            blurRadius: 8.0),
+                                        const Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 4, bottom: 3),
+                                          child: Text(
+                                            'kcal',
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  FitnessAppTheme.fontName,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 10,
+                                              letterSpacing: 0.2,
+                                              color: FitnessAppTheme.white,
+                                            ),
+                                          ),
+                                        ),
                                       ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Icon(
-                                        Icons.add,
-                                        color:
-                                            HexColor(mealsListData!.endColor),
-                                        size: 24,
+                                    )
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        color: FitnessAppTheme.nearlyWhite,
+                                        shape: BoxShape.circle,
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color: FitnessAppTheme.nearlyBlack
+                                                  .withOpacity(0.4),
+                                              offset: const Offset(8.0, 8.0),
+                                              blurRadius: 8.0),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Icon(
+                                          Icons.add,
+                                          color:
+                                              HexColor(mealsListData!.endColor),
+                                          size: 24,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                            ),
                             const Padding(
                               padding: EdgeInsets.only(left: 4, bottom: 3),
                               child: Text(

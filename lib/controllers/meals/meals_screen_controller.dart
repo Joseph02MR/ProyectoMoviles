@@ -1,3 +1,4 @@
+import 'package:final_moviles/controllers/meals/food_list_controller.dart';
 import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
 import 'package:final_moviles/models/diary_data.dart';
 import 'package:final_moviles/models/food.dart';
@@ -11,14 +12,12 @@ class MealsScreenController extends GetxController {
 
   @override
   void onInit() {
+    List<Food>.from(MealsMasterController.mealsList[mealName]['food_list']).obs;
     ever(insertedFoodList, (callback) {
       DiaryData.mealsData[mealName] = callback;
     });
-    setInMeaslMaster();
     super.onInit();
   }
-
-  void setInMeaslMaster() {}
 
   var insertedFood = "".obs;
 
@@ -31,7 +30,7 @@ class MealsScreenController extends GetxController {
 
   MealsScreenController({this.mealName = ""});
 
-  var insertedFoodList = List<Food>.empty(growable: true).obs;
+  var insertedFoodList = List<Food>.from({}).obs;
 
   void setInsertedFood(value) {
     insertedFoodList.add(value);
@@ -40,10 +39,10 @@ class MealsScreenController extends GetxController {
   }
 
   void removeFoodFromList(index) {
-    insertedFoodList.removeAt(index);
+    List<Food>.from(MealsMasterController.mealsList[mealName]['food_list'])
+        .removeWhere((element) => false);
     updateNutrimentalData();
-
-    update();
+    logger.i(MealsMasterController.mealsList[mealName]['food_list'].toString());
   }
 
   void resetMealData() {
@@ -61,16 +60,16 @@ class MealsScreenController extends GetxController {
       mealProts.value += element.procnt * element.portion;
       mealFats.value += element.fat * element.portion;
     }
-    saveDataInDiary();
     saveDataInMealsMaster();
-    logger.i(DiaryData.mealsData[mealName].toString());
+    DiaryData.setDiaryData((MealsMasterController()));
   }
 
   void saveDataInDiary() {
     DiaryData.mealsData[mealName] = Map.from({
       "name": mealName,
       "nutrient_data": nutrientDataToMap(),
-      "food_list": List.from(insertedFoodList.map((element) => element.toMap()))
+      "food_list":
+          List<Food>.from(insertedFoodList.map((element) => element.toMap()))
     });
   }
 
@@ -78,7 +77,7 @@ class MealsScreenController extends GetxController {
     MealsMasterController.mealsList[mealName] = Map.from({
       "name": mealName,
       "nutrient_data": nutrientDataToMap(),
-      "food_list": List.from(insertedFoodList.map((element) => element.toMap()))
+      "food_list": List<Food>.from(insertedFoodList.map((element) => element))
     });
     MealsMasterController.updateDayNutrimentalData();
   }

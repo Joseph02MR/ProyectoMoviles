@@ -16,6 +16,7 @@ class Food {
     required this.fat,
     required this.chocdf,
     required this.fibtg,
+    required this.portion,
   });
 
   factory Food.fromJson(Map<String, dynamic> json) => Food(
@@ -26,6 +27,18 @@ class Food {
         fat: json["nutrients"]["FAT"],
         chocdf: json["nutrients"]["CHOCDF"]?.toDouble(),
         fibtg: json["nutrients"]["FIBTG"],
+        portion: 0,
+      );
+
+  factory Food.fromMap(Map<String, dynamic> json) => Food(
+        foodId: json["food_id"],
+        label: json["label"],
+        enercKcal: json["kcal"],
+        procnt: json["prots"]?.toDouble(),
+        fat: json["fats"],
+        chocdf: json["carbs"]?.toDouble(),
+        fibtg: 0,
+        portion: json["portion"],
       );
 
   void setPortion(value) {

@@ -1,10 +1,10 @@
 import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
-import 'package:final_moviles/screens/my_diary/meals_list_view.dart';
+import 'package:final_moviles/models/diary_data.dart';
 import 'package:final_moviles/screens/my_diary/water_view.dart';
 import 'package:final_moviles/widgets/ui_view/body_measurement.dart';
 import 'package:final_moviles/widgets/ui_view/glass_view.dart';
-import 'package:final_moviles/widgets/ui_view/mediterranean_diet_view.dart';
 import 'package:final_moviles/widgets/ui_view/title_view.dart';
+import 'package:intl/intl.dart';
 import '../../fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -230,7 +230,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0)),
                                 onTap: () {},
-                                child: Center(
+                                child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_left,
                                     color: FitnessAppTheme.grey,
@@ -245,8 +245,8 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                               ),
                               child: Row(
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
+                                  const Padding(
+                                    padding: EdgeInsets.only(right: 8),
                                     child: Icon(
                                       Icons.calendar_today,
                                       color: FitnessAppTheme.grey,
@@ -254,9 +254,9 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                     ),
                                   ),
                                   Text(
-                                    '15 May',
+                                    DateFormat.MMMMd().format(DiaryData.date),
                                     textAlign: TextAlign.left,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 18,
@@ -275,7 +275,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(32.0)),
                                 onTap: () {},
-                                child: Center(
+                                child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_right,
                                     color: FitnessAppTheme.grey,

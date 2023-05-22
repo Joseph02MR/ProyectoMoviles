@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:final_moviles/controllers/meals/add_meal_controller.dart';
 import 'package:final_moviles/controllers/meals/food_list_controller.dart';
+import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
 import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
 import 'package:final_moviles/models/food.dart';
@@ -86,6 +87,7 @@ class MealsDetailView extends StatelessWidget {
                   addmealCon.getFoodData().then((value) {
                     addmealCon.foodObj!.setPortion(addmealCon.portion.value);
                     mealsCon!.setInsertedFood(addmealCon.foodObj);
+                    FoodListController.to.setInsertedFood(addmealCon.foodObj);
                     AwesomeDialog(
                       context: context,
                       dialogType: DialogType.success,
@@ -118,7 +120,7 @@ class MealsDetailView extends StatelessWidget {
   }
 
   Future<void> _displayFoodDetailsDialog(BuildContext context, index) async {
-    Food aux = mealsCon!.insertedFoodList[index];
+    Food aux = FoodListController.to.foodList[index];
     List<NutrientCardData> nutriotionalData = List.from({
       NutrientCardData('Carbs', '#87A0E5', aux.chocdf, 'g'),
       NutrientCardData('Protein', '#F56E98', aux.procnt, 'g'),
@@ -153,24 +155,14 @@ class MealsDetailView extends StatelessWidget {
                   },
                 )),
             actions: <Widget>[
-              MaterialButton(
+              /*    MaterialButton(
                 color: Colors.red,
                 textColor: Colors.white,
                 child: const Text('Eliminar'),
                 onPressed: () {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.warning,
-                    animType: AnimType.rightSlide,
-                    title: 'Eliminar alimento',
-                    desc: '¿Desea eliminar este registro?',
-                    btnOkOnPress: () {
-                      mealsCon!.insertedFoodList.removeAt(index);
-                      Get.back();
-                    },
-                  ).show();
+                  onDelete(context, index);
                 },
-              ),
+              ),*/
               MaterialButton(
                 color: Colors.green,
                 textColor: Colors.white,
@@ -194,7 +186,7 @@ class MealsDetailView extends StatelessWidget {
       btnCancelOnPress: () => Get.off(context),
       btnOkOnPress: () {
         mealsCon?.removeFoodFromList(index);
-        Get.off(context);
+        Get.back();
       },
     ).show();
   }
@@ -276,7 +268,11 @@ class MealsDetailView extends StatelessWidget {
                                     child: Scaffold(
                                       body: GetBuilder<FoodListController>(
                                         init: FoodListController(
-                                            mealsCon!.insertedFoodList),
+                                            mealsCon!.mealName,
+                                            List<Food>.from(
+                                                MealsMasterController.mealsList[
+                                                        mealsCon!.mealName]
+                                                    ['food_list'])),
                                         builder: (_) => ListView.builder(
                                           itemCount: _.foodList.length,
                                           itemBuilder: (BuildContext context,

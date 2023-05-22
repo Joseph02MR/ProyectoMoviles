@@ -49,7 +49,9 @@ class DiaryDataDAO extends GetxController {
   }
 
   void setDayData(data) {
-    MealsMasterController.mealsList.value = data['meals_data'];
+    DiaryData.userWeight = data['weight'].toDouble();
+    DiaryData.userHeight = data['height'];
+    MealsMasterController.FromMap(data['meals_data']);
     MealsMasterController.dayKcal.value =
         data['day_nutrient_data']['total_kcal'];
     MealsMasterController.dayCarbs.value =
@@ -61,6 +63,7 @@ class DiaryDataDAO extends GetxController {
   }
 
   void saveData(context) {
+    logger.i(DiaryData.toMap().toString());
     diaryDocument!.set(DiaryData.toMap()).then((value) {
       AwesomeDialog(
         context: context,
@@ -80,6 +83,8 @@ class DiaryDataDAO extends GetxController {
         desc: 'El progreso no se actualizó',
         btnOkOnPress: () {},
       ).show();
+      logger.w(error);
+      logger.i(stackTrace);
     });
   }
 }
