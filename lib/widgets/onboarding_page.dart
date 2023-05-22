@@ -1,6 +1,8 @@
 // import 'package:final_moviles/fitness_app_home_screen.dart';
+import 'package:final_moviles/controllers/onboarding_controller.dart';
 import 'package:final_moviles/screens/Login_Screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OnboardingPageModel {
   final String title;
@@ -27,30 +29,35 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
+
+  OnboardingController currentpage = OnboardingController();
   // Store the currently visible page
   int _currentPage = 0;
+  
   // Define a controller for the pageview
   final PageController _pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
+    currentpage.page.value = _currentPage;
     return Scaffold(
-      body: AnimatedContainer(
+      body: Obx(() => AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        color: widget.pages[_currentPage].bgColor,
+        color: widget.pages[currentpage.page.value].bgColor,
         child: SafeArea(
           child: Column(
             children: [
-              Expanded(
+               Expanded(
                 // Pageview to render each page
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: widget.pages.length,
                   onPageChanged: (idx) {
                     // Change current page when pageview changes
-                    setState(() {
-                      _currentPage = idx;
-                    });
+                    // setState(() {
+                    //   _currentPage = idx;
+                    // });
+                    currentpage.page.value = idx;
                   },
                   itemBuilder: (context, idx) {
                     final _item = widget.pages[idx];
@@ -105,7 +112,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: widget.pages
                     .map((item) => AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
-                          width: _currentPage == widget.pages.indexOf(item)
+                          width: currentpage.page.value == widget.pages.indexOf(item)
                               ? 20
                               : 4,
                           height: 4,
@@ -134,17 +141,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         )),
                     TextButton(
                       onPressed: () {
-                        if (_currentPage == widget.pages.length - 1) {
+                        if (currentpage.page.value == widget.pages.length - 1) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => LoginScreen()));
                         } else {
-                          _pageController.animateToPage(_currentPage + 1,
+                          _pageController.animateToPage(currentpage.page.value + 1,
                               curve: Curves.easeInOutCubic,
                               duration: const Duration(milliseconds: 250));
                         }
                       },
                       child: Text(
-                        _currentPage == widget.pages.length - 1
+                        currentpage.page.value == widget.pages.length - 1
                             ? "Finish"
                             : "Next",
                         style: TextStyle(color: Colors.white),
@@ -156,7 +163,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

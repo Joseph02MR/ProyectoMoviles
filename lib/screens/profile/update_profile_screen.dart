@@ -340,7 +340,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               child: TextFormField(
                                 controller: heightController,
                                 decoration: const InputDecoration(
-                                    label: Text(tHeight),
+                                    label: Text('${tHeight}CM'),
                                     prefixIcon:
                                         Icon(Icons.person_outline_rounded)),
                               ),
@@ -361,7 +361,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             child: TextFormField(
                               controller: weightController,
                               decoration: const InputDecoration(
-                                  label: Text(tWeight),
+                                  label: Text('${tWeight}KG'),
                                   prefixIcon:
                                       Icon(Icons.person_outline_rounded)),
                             ),
