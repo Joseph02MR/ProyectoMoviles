@@ -37,7 +37,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.1.0
   flutter_rating_bar: ^4.0.1
-  intl: ^0.17.0
   animations: ^2.0.3
   http: ^0.13.5
   firebase_auth: ^4.3.0
@@ -59,6 +58,7 @@ dependencies:
   dio: ^4.0.6
   dio_http_cache: ^0.3.0
   dio_cache_interceptor: ^3.4.2
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

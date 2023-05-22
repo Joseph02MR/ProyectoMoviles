@@ -42,6 +42,7 @@ class MealsScreenController extends GetxController {
   void removeFoodFromList(index) {
     insertedFoodList.removeAt(index);
     updateNutrimentalData();
+
     update();
   }
 
@@ -60,10 +61,8 @@ class MealsScreenController extends GetxController {
       mealProts.value += element.procnt * element.portion;
       mealFats.value += element.fat * element.portion;
     }
-
-    logger.i(
-        '${mealKcal.value} kcals ${mealProts.value} prots ${mealCarbs.value} carbs ${mealFats.value} fats ');
     saveDataInDiary();
+    saveDataInMealsMaster();
     logger.i(DiaryData.mealsData[mealName].toString());
   }
 

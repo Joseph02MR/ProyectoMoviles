@@ -6,6 +6,7 @@ import 'package:final_moviles/models/tabIcon_data.dart';
 import 'package:final_moviles/screens/my_diary/my_meals_screen.dart';
 import 'package:final_moviles/screens/profile/profile_screen.dart';
 import 'package:final_moviles/screens/training_screen.dart';
+import 'package:final_moviles/utils/userdata.dart';
 import 'package:final_moviles/widgets/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
       logger.w('User declined or has not accepted permission');
     }
     final fcmToken = await FirebaseMessaging.instance.getToken();
+    UserData.dao.initData();
   }
 
   @override

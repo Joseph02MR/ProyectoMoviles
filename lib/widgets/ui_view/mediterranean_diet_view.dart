@@ -27,7 +27,6 @@ class MediterranesnDietView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MealsMasterController masterController = MealsMasterController();
     var profile = aux();
     return AnimatedBuilder(
       animation: animationController!,
@@ -123,7 +122,7 @@ class MediterranesnDietView extends StatelessWidget {
                                                         const EdgeInsets.only(
                                                             left: 4, bottom: 3),
                                                     child: Text(
-                                                      '${(masterController.objDayKcal.value * animation!.value).toInt()}',
+                                                      '${(MealsMasterController.dayKcal.value * animation!.value).toInt()}',
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: const TextStyle(
@@ -204,7 +203,7 @@ class MediterranesnDietView extends StatelessWidget {
                                                 CrossAxisAlignment.center,
                                             children: <Widget>[
                                               Text(
-                                                '${profile['kcal_goal'] - masterController.objDayKcal.value.toInt().abs()}',
+                                                '${profile['kcal_goal'] - MealsMasterController.dayKcal.value.toInt().abs()}',
                                                 //'${(1503 * animation!.value).toInt()}',
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
@@ -218,8 +217,8 @@ class MediterranesnDietView extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                masterController
-                                                            .objDayKcal.value >
+                                                MealsMasterController
+                                                            .dayKcal.value >
                                                         profile['kcal_goal']
                                                     ? 'kcal extra'
                                                     : 'kcal left',
@@ -318,9 +317,8 @@ class MediterranesnDietView extends StatelessWidget {
                                               width: min(
                                                   70,
                                                   (70 *
-                                                      (masterController
-                                                              .objDayCarbs
-                                                              .value /
+                                                      (MealsMasterController
+                                                              .dayCarbs.value /
                                                           profile[
                                                               'carbs_goal']) *
                                                       animation!.value)),
@@ -344,7 +342,7 @@ class MediterranesnDietView extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
-                                    '${max(0, 1 * profile["carbs_goal"] - masterController.objDayCarbs.value).toInt()} g left',
+                                    '${max(0, 1 * profile["carbs_goal"] - MealsMasterController.dayCarbs.value).toInt()} g left',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
@@ -396,8 +394,8 @@ class MediterranesnDietView extends StatelessWidget {
                                                 width: min(
                                                     70,
                                                     (70 *
-                                                        (masterController
-                                                                .objDayProts
+                                                        (MealsMasterController
+                                                                .dayProts
                                                                 .value /
                                                             profile[
                                                                 'prot_goal']) *
@@ -423,7 +421,7 @@ class MediterranesnDietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '${max(0, 1 * profile["prot_goal"] - masterController.objDayProts.value).toInt()} g left',
+                                        '${max(0, 1 * profile["prot_goal"] - MealsMasterController.dayProts.value).toInt()} g left',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -477,9 +475,8 @@ class MediterranesnDietView extends StatelessWidget {
                                                 width: min(
                                                     70,
                                                     (70 *
-                                                        (masterController
-                                                                .objDayFats
-                                                                .value /
+                                                        (MealsMasterController
+                                                                .dayFats.value /
                                                             profile[
                                                                 'fat_goal']) *
                                                         animation!.value)),
@@ -504,7 +501,7 @@ class MediterranesnDietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '${max(0, 1 * profile["fat_goal"] - masterController.objDayFats.value).toInt()} g left',
+                                        '${max(0, 1 * profile["fat_goal"] - MealsMasterController.dayFats.value).toInt()} g left',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,

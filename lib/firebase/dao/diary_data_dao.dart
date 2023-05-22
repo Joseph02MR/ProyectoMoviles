@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_moviles/models/diary_data.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,7 @@ class DiaryDataDAO extends GetxController {
   Map<String, dynamic>? daysData;
   DocumentReference? diaryDocument;
 
-  @override
-  void onInit() async {
+  void initData() async {
     diaryEntries = await firestore
         .collection('diary')
         .where(
@@ -32,11 +32,29 @@ class DiaryDataDAO extends GetxController {
       }
     } else {
       diaryDocument = diaryCollection.doc();
+      logger.i(diaryDocument);
     }
-    super.onInit();
   }
 
-  void saveData() {
-    diaryDocument!.set(DiaryData.toMap());
+  void saveData(context) {
+    diaryDocument!.set(DiaryData.toMap()).then((value) {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.rightSlide,
+        title: 'Guardado finalizado',
+        desc: 'Progreso actualizado',
+        btnOkOnPress: () {},
+      ).show();
+    }).onError((error, stackTrace) {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.rightSlide,
+        title: 'Error en el guardado',
+        desc: 'El progreso no se actualizó',
+        btnOkOnPress: () {},
+      ).show();
+    });
   }
 }

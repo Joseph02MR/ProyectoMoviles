@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
 import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
 import 'package:final_moviles/fitness_app_theme.dart';
 import 'package:final_moviles/models/profile_activities.dart';
@@ -119,22 +120,25 @@ class DietDetailsView extends StatelessWidget {
                                                   child: Image.asset(
                                                       "assets/fitness_app/eaten.png"),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4, bottom: 3),
-                                                  child: Text(
-                                                    '${mealsCon.mealKcal.toInt()}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontFamily:
-                                                          FitnessAppTheme
-                                                              .fontName,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 16,
-                                                      color: FitnessAppTheme
-                                                          .darkerText,
+                                                Obx(
+                                                  () => Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 4, bottom: 3),
+                                                    child: Text(
+                                                      '${MealsMasterController.mealsList[mealsCon.mealName]["nutrient_data"]["kcal"].toInt() ?? 0}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontFamily:
+                                                            FitnessAppTheme
+                                                                .fontName,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16,
+                                                        color: FitnessAppTheme
+                                                            .darkerText,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -201,62 +205,74 @@ class DietDetailsView extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          Text(
-                                            '${actProfileData['kcal_goal'] - mealsCon.mealKcal.toInt().abs()}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 24,
-                                              letterSpacing: 0.0,
-                                              color: FitnessAppTheme
-                                                  .nearlyDarkBlue,
+                                          Obx(
+                                            () => Text(
+                                              '${actProfileData["kcal_goal"] - MealsMasterController.mealsList[mealsCon.mealName]["nutrient_data"]["kcal"].toInt().abs() ?? 0}',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontFamily:
+                                                    FitnessAppTheme.fontName,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 24,
+                                                letterSpacing: 0.0,
+                                                color: FitnessAppTheme
+                                                    .nearlyDarkBlue,
+                                              ),
                                             ),
                                           ),
-                                          Text(
-                                            mealsCon.mealKcal >
-                                                    actProfileData['kcal_goal']
-                                                ? 'kcal extra'
-                                                : 'Kcal left',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily:
-                                                  FitnessAppTheme.fontName,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                              letterSpacing: 0.0,
-                                              color: FitnessAppTheme.grey
-                                                  .withOpacity(0.5),
+                                          Obx(
+                                            () => Text(
+                                              mealsCon.mealKcal >
+                                                      actProfileData[
+                                                          'kcal_goal']
+                                                  ? 'kcal extra'
+                                                  : 'Kcal left',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily:
+                                                    FitnessAppTheme.fontName,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                letterSpacing: 0.0,
+                                                color: FitnessAppTheme.grey
+                                                    .withOpacity(0.5),
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CustomPaint(
-                                      painter: CurvePainter(
-                                          colors: [
-                                            FitnessAppTheme.nearlyDarkBlue,
-                                            HexColor("#8A98E8"),
-                                            HexColor("#8A98E8")
-                                          ],
-                                          angle: (mealsCon.mealKcal *
-                                                      100 /
-                                                      actProfileData[
-                                                          'kcal_goal']) *
-                                                  360 /
-                                                  100 +
-                                              (360 - 140) *
-                                                  (1.0 - animation!.value)),
-                                      child: const SizedBox(
-                                        width: 108,
-                                        height: 108,
-                                      ),
-                                    ),
-                                  )
+                                  Obx(() => Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: CustomPaint(
+                                          painter: CurvePainter(
+                                              colors: [
+                                                FitnessAppTheme.nearlyDarkBlue,
+                                                HexColor("#8A98E8"),
+                                                HexColor("#8A98E8")
+                                              ],
+                                              angle: (MealsMasterController
+                                                              .mealsList[
+                                                                  mealsCon
+                                                                      .mealName]
+                                                                  [
+                                                                  "nutrient_data"]
+                                                                  ["kcal"]
+                                                              .toInt() *
+                                                          100 /
+                                                          actProfileData[
+                                                              'kcal_goal']) *
+                                                      360 /
+                                                      100 +
+                                                  (360 - 140) *
+                                                      (1.0 - animation!.value)),
+                                          child: const SizedBox(
+                                            width: 108,
+                                            height: 108,
+                                          ),
+                                        ),
+                                      ))
                                 ],
                               ),
                             ),
@@ -313,7 +329,14 @@ class DietDetailsView extends StatelessWidget {
                                               width: min(
                                                   70,
                                                   (70 *
-                                                      (mealsCon.mealCarbs /
+                                                      (MealsMasterController
+                                                              .mealsList[
+                                                                  mealsCon
+                                                                      .mealName]
+                                                                  [
+                                                                  "nutrient_data"]
+                                                                  ["carbs"]
+                                                              .toInt() /
                                                           actProfileData[
                                                               'carbs_goal']) *
                                                       animation!.value)),
@@ -338,7 +361,7 @@ class DietDetailsView extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 6),
                                     child: Obx(
                                       () => Text(
-                                        '${mealsCon.mealCarbs.toInt()}g total',
+                                        '${MealsMasterController.mealsList[mealsCon.mealName]["nutrient_data"]["carbs"].toInt()}g total',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: FitnessAppTheme.fontName,
@@ -390,7 +413,14 @@ class DietDetailsView extends StatelessWidget {
                                                 width: min(
                                                     70,
                                                     (70 *
-                                                        (mealsCon.mealProts /
+                                                        (MealsMasterController
+                                                                .mealsList[
+                                                                    mealsCon
+                                                                        .mealName]
+                                                                    [
+                                                                    "nutrient_data"]
+                                                                    ["prots"]
+                                                                .toInt() /
                                                             actProfileData[
                                                                 'prot_goal']) *
                                                         animationController!
@@ -417,7 +447,7 @@ class DietDetailsView extends StatelessWidget {
                                         padding: const EdgeInsets.only(top: 6),
                                         child: Obx(
                                           () => Text(
-                                            '${mealsCon.mealProts.toInt()}g total',
+                                            '${MealsMasterController.mealsList[mealsCon.mealName]["nutrient_data"]["prots"].toInt()}g total',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:
@@ -472,7 +502,14 @@ class DietDetailsView extends StatelessWidget {
                                                 width: min(
                                                     70,
                                                     (70 *
-                                                        (mealsCon.mealFats /
+                                                        (MealsMasterController
+                                                                .mealsList[
+                                                                    mealsCon
+                                                                        .mealName]
+                                                                    [
+                                                                    "nutrient_data"]
+                                                                    ["fats"]
+                                                                .toInt() /
                                                             actProfileData[
                                                                 'fat_goal']) *
                                                         animationController!
@@ -499,7 +536,7 @@ class DietDetailsView extends StatelessWidget {
                                         padding: const EdgeInsets.only(top: 6),
                                         child: Obx(
                                           () => Text(
-                                            '${mealsCon.mealFats.toInt()}g total',
+                                            '${MealsMasterController.mealsList[mealsCon.mealName]["nutrient_data"]["fats"].toInt() ?? 0}g total',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily:

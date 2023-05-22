@@ -1,8 +1,10 @@
 import 'package:final_moviles/controllers/meals/meals_master_controller.dart';
+import 'package:final_moviles/models/diary_data.dart';
 import 'package:final_moviles/screens/my_diary/meals_list_view.dart';
 import 'package:final_moviles/widgets/ui_view/glass_view.dart';
 import 'package:final_moviles/widgets/ui_view/mediterranean_diet_view.dart';
 import 'package:final_moviles/widgets/ui_view/title_view.dart';
+import 'package:intl/intl.dart';
 import '../../fitness_app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -63,8 +65,8 @@ class _MyMealsScreenState extends State<MyMealsScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Mediterranean diet',
-        subTxt: 'Details',
+        titleTxt: 'Diet Details',
+        subTxt: 'Guardar',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 0, 1.0,
@@ -84,7 +86,6 @@ class _MyMealsScreenState extends State<MyMealsScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Meals today',
-        subTxt: 'Customize',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 2, 1.0,
@@ -237,14 +238,14 @@ class _MyMealsScreenState extends State<MyMealsScreen>
                                 ),
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(
+                            Padding(
+                              padding: const EdgeInsets.only(
                                 left: 8,
                                 right: 8,
                               ),
                               child: Row(
                                 children: <Widget>[
-                                  Padding(
+                                  const Padding(
                                     padding: EdgeInsets.only(right: 8),
                                     child: Icon(
                                       Icons.calendar_today,
@@ -253,9 +254,9 @@ class _MyMealsScreenState extends State<MyMealsScreen>
                                     ),
                                   ),
                                   Text(
-                                    '15 May',
+                                    DateFormat.MMMMd().format(DiaryData.date),
                                     textAlign: TextAlign.left,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: FitnessAppTheme.fontName,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 18,

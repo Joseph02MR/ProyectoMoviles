@@ -1,6 +1,3 @@
-import 'package:final_moviles/controllers/meals/meals_screen_controller.dart';
-import 'package:final_moviles/models/diary_data.dart';
-import 'package:final_moviles/models/meals_list_data.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -38,7 +35,30 @@ class MealsMasterController extends GetxController {
   var objDayFats = 0.0.obs;
 
   static var waterConsumed = 0.obs;
-  static var mealsList = Map.from({}).obs;
+  static var mealsList = Map.from({
+    "Breakfast": {
+      "name": "Breakfast",
+      "nutrient_data": {"kcal": 0, "carbs": 0, "prots": 0, "fats": 0},
+      "food_list": {}
+    },
+    "Lunch": {
+      "name": "Lunch",
+      "nutrient_data": {"kcal": 0, "carbs": 0, "prots": 0, "fats": 0},
+      "food_list": {}
+    },
+    "Snack": {
+      "name": "Snack",
+      "nutrient_data": {"kcal": 0, "carbs": 0, "prots": 0, "fats": 0},
+      "food_list": {}
+    },
+    "Dinner": {
+      "name": "Dinner",
+      "nutrient_data": {"kcal": 0, "carbs": 0, "prots": 0, "fats": 0},
+      "food_list": {}
+    }
+  }).obs;
+
+  static void deleteEntry(name) {}
 
   static var dayKcal = 0.0.obs;
   static var dayCarbs = 0.0.obs;
@@ -65,7 +85,7 @@ class MealsMasterController extends GetxController {
       dayFats.value += element['nutrient_data']['fats'];
     }
     logger.i(
-        '${dayKcal.value} kcals ${dayProts.value} prots ${dayCarbs.value} carbs ${dayFats.value} fats ');
+        'UPDATE NUTRIMENT IN MEALS MASTER ${dayKcal.value} kcals ${dayProts.value} prots ${dayCarbs.value} carbs ${dayFats.value} fats ');
   }
 
   static Map<String, dynamic> mealsToMap() {
